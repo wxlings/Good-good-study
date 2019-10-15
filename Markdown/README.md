@@ -242,7 +242,7 @@ _（因为是纯文本，所以只要支持 Markdown 的地方都能获得一样
 
 ### 10. 流程图
 
-> 我擦，这个好强大...直接看例子：
+> 我擦，这个好强大...直接看例子： 不过 github 好像不支持显示
 
 ````
 ```flow
@@ -271,4 +271,4 @@ cond(no)->op
 
 ````
 
-工具： 推荐使用`typora`,[官网下载](https://typora.io/) 下滑至"Download" module 选择对应的版本
+## **工具： 推荐使用`typora`,[官网下载](https://typora.io/) 下滑至"Download" module 选择对应的版本**
