@@ -34,7 +34,7 @@ def print_info():
 #  对于字符串同样支持:%s (字符串) %d (整型)
 def string_fun():
     variable = "Hello,world !!" # define string 同样python在声明字符串时要使用双引号进行标识
-    variable = "Hello,world !! %s" %"@#$%^*&"
+    variable = "Hello,world !! %s" %"@#$%^*&" # 这里有点类似%s做为一个引用
     print(variable)
     char = variable[5]  #获取字符串指定索引位置的字符值
     print("char:" + char) # 纯字符串类型的数据可以使用"+"进行拼接
