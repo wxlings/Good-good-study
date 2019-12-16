@@ -3,8 +3,11 @@
 Python is a programming language supports several programming paradigms including Object-Orientated Programming (OOP) and functional programming.
 Python 是一种编程语言，支持多种编程范例，包括面向对象编程 （OOP） 和函数编程。
 
+安装 python 环境 及开发工具 IDE PyCharm
 执行 python 文件 `python file.py` python 脚本文件必须以 `.py` 为后缀名
 python 讲究行前以空格标识代码块的级别,要注意;
+
+打印: 使用 print("content") 注意: 内容一定是字符串类型
 
 > 基础数据类型：`string`,`integer`,`float of integer`,`bool` 四种,注意：`bool` 的值只有 `True` 和 `False`两个,和其他的语言有点差异
 > 声明变量时不需要指定数据类型,不需要使用修饰字符自动推断;如：`name="wxling"`,`age=23`,...

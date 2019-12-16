@@ -14,6 +14,9 @@ Tab <------> add tab lab 增加制表符
 Shift + Tab <------> reduce tab lab 移除制表符
 Shift + Enter <------> new line 开启新的一行
 
+Ctrol + Alt + f <------> 生成全局变量
+Ctrol + Alt + v <------> 生成本地变量
+Ctrol + Alt + m <------> 生成新的方法
 Ctrol + Alt + b <------> implementation 跳转到实现即源码
 Ctrol + Alt + s <------> open system setting 打开系统设置面板
 Ctrol + Alt + l <------> reformat code 格式化代码
