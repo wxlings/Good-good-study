@@ -55,6 +55,8 @@ def string_fun():
 
     if "wxling" in variable:    #var in variable 就是判断是否包含
         print("The variable contain \'wxling\'")
+    elif "wxling" == variable:
+        print ("wxling == " + variable)
     else:
         print("The variable don`t contain \'wxling\'")
 
