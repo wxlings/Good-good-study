@@ -9,7 +9,6 @@
 - [Typora](https://typora.io/) 是通用的 Markdown 编辑工具
 
 <p>
-
 ---
 
 接下来简单描述一下语法：
@@ -23,7 +22,7 @@
 
 ```
 # 这是一级标题
-## 这是二级标题、
+## 这是二级标题
 ...
 ###### 这是六级标题
 ```
@@ -43,7 +42,6 @@
 > ###### 这是六级标题
 
 <p>
-
 ---
 
 ### 2. 字体样例
@@ -102,7 +100,6 @@
   注解文字效果：这里是一个 [^注解]
 
 <p>
-
 ---
 
 ### 3. 区块引用样例
@@ -126,7 +123,6 @@
 > > > > > > > 这是描述的内部的引用...
 
 <p>
-
 ---
 
 ### 4. 分割线样例
@@ -146,7 +142,6 @@
 ---
 
 <p>
-
 ---
 
 ### 5. 图片样例
@@ -164,7 +159,6 @@
 ![Image](http://inews.gtimg.com/newsapp_match/0/359390627/0 "这是一张图片!")
 
 <p>
-
 ---
 
 ### 6. 超链接样例
@@ -183,7 +177,6 @@
 [Typora 官网](https://typora.io/ "Typora官网")
 
 <p>
-
 ---
 
 ### 7. 列表样例
@@ -227,7 +220,6 @@
   - 逻辑条件
 
 <p>
-
 ---
 
 ### 8. 代码样例
@@ -264,7 +256,6 @@ public static void main(String[] args){
 ```
 
 <p>
-
 ---
 
 ### 9. 表格
@@ -292,7 +283,6 @@ public static void main(String[] args){
 | Suxan |  28 |   男   | 帅帅帅 de 一批............... |
 
 <p>
-
 ---
 
 ### 10. 流程图
@@ -341,6 +331,7 @@ cond(no)->op
 >   > content;
 >   - content;
 >   * content;
+>     
 >     > ![image](https://tse1-mm.cn.bing.net/th?id=OIP.uUT5wt6VDHJ7zAFDru9IvQHaHa&w=156&h=160&c=8&rs=1&qlt=90&pid=3.1&rm=2)
 >
 > > > This is title : `c`
