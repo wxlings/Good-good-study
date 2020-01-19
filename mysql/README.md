@@ -1,6 +1,8 @@
 MySQL 可以运行于多个系统上，并且支持多种语言。这些编程语言包括 C、C++、Python、Java、Perl、PHP、Eiffel、Ruby 和 Tcl 等。
 RDBMS 术语
 
+#### SQL 关键字不区分大小写 ，例如： SELECT _ FROM t_name ; == select _ from T_NAME;
+
 - 数据库: 数据库是一些关联表的集合。
 - 数据表: 表是数据的矩阵。在一个数据库中的表看起来像一个简单的电子表格。
 - 列: 一列(数据元素) 包含了相同类型的数据, 例如邮政编码的数据。

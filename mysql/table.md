@@ -27,7 +27,7 @@
     -> salary FLOAT(8,2) DEFAULT 0.00 COMMENT 'user`s salary.',
     -> mobile CHAR(11) UNIQUE NOT NULL COMMENT 'user`s mobile phone.',;
     -> info TEXT COMMENT 'user`s info.',
-    -> create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP() COMMENT 'create user time.',
+    -> create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'create user time.',
     -> PRIMARY KEY(uid)
     -> );
   ```
@@ -217,7 +217,7 @@
 ##### SELECT
 
 ```mysql
-SELECT column1,column2,... FROM t_name [WHERE cluase];
+SELECT column1,column2,... FROM t_name [WHERE claus];
 ```
 
 > 可以使用`*`代替所有字段.
@@ -340,7 +340,7 @@ SELECT
   -> ON
   -> t1.id = t2.uid
   -> WHERE
-  -> cluase;
+  -> clause;
 ```
 
 > 使用的 table JOIN table 时 用 `ON` 进行条件连接;
@@ -358,7 +358,7 @@ SELECT
   -> ON
   -> t1.id = t2.uid
   -> WHERE
-  -> cluase;
+  -> clause;
 ```
 
 右连:会读取右边数据表的全部数据，即便左边边表无对应数据。
@@ -374,5 +374,5 @@ SELECT
   -> ON
   -> t1.id = t2.uid
   -> WHERE
-  -> cluase;
+  -> clause;
 ```

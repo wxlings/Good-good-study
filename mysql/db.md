@@ -27,8 +27,7 @@
    SET default_storage_engine=<engine_name>
    ```
 
-<p>
----
+## <p>
 
 ### 启动/停止数据库服务
 
@@ -51,8 +50,7 @@
   > Mysqladmin 还可以用来检索版本、进程以及服务器的状态信息。
   > 关闭服务需要验证管理员身份
 
-<p>
----
+## <p>
 
 ### 连接/断开数据库
 
@@ -70,8 +68,7 @@
   QUIT / EXIT
   ```
 
-<p>
----
+## <p>
 
 ### 创建/删除数据库
 
@@ -121,10 +118,10 @@
 
   > 例如：`ALTER DATABASE db_name CHARACTER SET gb2312;`
 
-* 查看当前数据库版本号,当前用户,数据库名称...
+* 元数据:查看当前数据库版本号,当前用户,数据库名称...
 
   ```mysql
-  SELECT VERTION(),USER(),DATABASE(),SYSDATE(),NOW(),DATE(),CURRENT_TIMESTAMP(),;
+  SELECT VERTION(),USER(),DATABASE();
   ```
 
 * 查看当前数据库配置信息
