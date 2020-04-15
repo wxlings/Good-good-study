@@ -146,6 +146,27 @@ UYT7N17A28000401        device
 - `uninstall -k <package>` 卸载指定的包名的应用
 - `clear <package>` 清除指定包名的应用的所有数据，与刚安装完的状态相同
 
+#### 查系统日志
+
+`logcat [options]` 可以获取到系统的日志信息，需要结合`adb shell`进行使用
+详细请[点击](https://developer.android.google.cn/studio/command-line/logcat#filteringOutput "官网")
+
+- `-b` log 模块有个缓存的概念，默认开启`main`,`system`,和`crash`三个缓存域，但是华为 mate10 默认并没有加载`crash`,这个缓存域有一个策略周期性清除
+- `-c` 清除（清空）所选的缓冲区并退出，默认缓冲区集为 main、system 和 crash。要清除所有缓冲区，请使用 -b all -c。
+- `f </sdcard/file>` 把当前日志或缓存域日志信息报存到文件
+- `-s [TAG:property]` 设置日志过滤条件，在 Android 打印的使用：
+
+```
+  Log.e(TAG,'content') // 日志级别分为'v':'verbose','d':'debug','i':'info','w':'warn','e':'error'
+  adb shell logcat -s SplashActivity:E -f /sdcard/log.txt // 打印`Log.e()`的日志信息
+```
+
+打印的格式是 `date time process_id-thread-id/package-name log-level/TAG: content` ,在设置过滤的时候通过`-s`控制`TAG`和日志级别
+例如：`W/MainActivity` 要符合`*:TAG`,其中级别分别对应原生级别大写首字母：`V`,`I`,`D`,`W`,`E`
+
+- `-S` 在输出中包含统计信息，以帮助您识别和定位日志垃圾信息发送者。
+- `-P <whiteList ~blackList>` 设置日志过滤的白名单和黑名单，白名单"list" 就是进程 pid 及 uid ，黑明单就是前面加上"~"
+
 #### 调用设备政策管理器 (dpm)
 
 `adb shell dpm <command>`为便于开发和测试设备管理（或其他企业）应用，您可以向设备政策管理器 (dpm) 工具发出命令。使用该工具可控制活动管理应用，或更改设备上的政策状态数据。
