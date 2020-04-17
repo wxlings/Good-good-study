@@ -8,8 +8,8 @@
 
 > 如果经常使用`adb`工具，强烈建议把 adb 运行路径配置到系统的运行环境中
 
-1. 如果你安装了`android`开发环境，那么你可以直接打开`Android sdk`的安装路径,找到文件夹`android_sdk/platform-tools/`,就可以直接找到`adb.exe`了；
-2. 当然也支持下载`adb`独立程序，请点击[下载](https://developer.android.google.cn/studio/releases/platform-tools "adb下载")
+1. 如果你安装了`android`开发环境，那么你可以直接打开`Android sdk`的安装路径,找到文件夹`android_sdk/platform-tools/`,就可以找到`adb.exe`，然后通过命令行模式使用`adb`命令了；
+2. 当然也支持下载`adb`独立程序，请点击[下载](https://developer.android.google.cn/studio/releases/platform-tools "adb下载")；下载完成后解压并进入目录即可;
 
 #### adb 工作原理
 
@@ -35,9 +35,10 @@ C:\Users\admin>adb start-server
 
 #### 在设备上启动 ADB 调试
 
-想要连接 Android 设备并使用`adb`必须在设备的系统设置中启用 USB 调试（位于开发者选项下）
+想要连接 Android 设备并使用`adb`命令必须在设备的系统设置中`启用USB调试`（位于开发者选项下）
 在搭载 Android 4.2 及更高版本的设备上，`开发者选项`屏幕默认情况下处于隐藏状态。如需将其显示出来，请依次转到`设置` > `关于手机`，然后点按`版本号`七次。返回上一屏幕，在底部可以找到`开发者选项`进入该页面打开`USB调试`即可。
-部分机型还要修改`USB连接方式`为`传输文件`模式
+
+> 部分机型还要修改`USB连接方式`为`传输文件`模式,才可以正常连接
 
 #### 通过 adb 服务连接 Android 设备
 
@@ -75,28 +76,46 @@ UYT7N17A28000401        device
     adb devices
 ```
 
-**如果连接过程中断开了，确保设备和主机在同一网络中后可以使用`adb connect [*:port]`进行重新连接**
-
-**如果还没有解决问题，那就重置一下 adb 服务 `adb kill-server` （与启动服务相对应`start-server`,注意没有'restart-server'操作）重新开始**
+**如果连接过程中断开了，在确保设备和连接计算机在同一网络中后，可以使用`adb connect [*:port]`进行重新连接，如果还没有解决问题，那就重置一下 adb 服务 `adb kill-server` （与启动服务相对应`start-server`,注意没有'restart-server'操作）重新开始 adb 连接流程**
 
 #### 常用的 adb 命令 [更多详细命令](https://developer.android.google.cn/studio/command-line/adb.html#-t-option 官方介绍)
 
 - `adb --help` 有问题找助手
-- `adb device [-l]` 查看连接 adb 服务的设备列表，参数 `-l` 仅返回在线设备
-- `adb -s <WOSWRKP799999999> [command]` 如果主机连接有多台设备，想要给指定的设备发命令请用`-s`指定该设备的标识，如果多设备时没有使用`-s`的话 adb 会报错
-  `adb install [options] <**.apk>` 使用`install`进行安装指定路径的 apk 文件；`options` 可以包含： `-r` 重新安装当前 apk 文件，保留已有数据 `-t` 允许安装测试 apk 文件 `-g` 授权所有清单文件
-- `adb pull <device> <host>` 复制 Android 设备上的文件到本地主机，注意本地文件路径不能是根目录，例如：`adb pull -s WOSWRKP799999999 /sdcard/storage/user.txt d:/adb/`
-- `adb push <host> <device>` 复制本地主机文件并推送到 Android 设备，如果指定目标文件名已经存在会替换已有文件，例如：`adb push d:/adb/hello.png /sdcard/temp.png`
-- `adb kill-server` 停止 adb 服务，通常与`adb start-server`联合做重启使用
-- `adb start-server` 开始 adb 服务
+
+* `adb start-server` 启动 adb 服务
+* `adb kill-server` 停止 adb 服务，通常与`adb start-server`联合做重启服务使用
+
+* `adb reboot [bootloader | recovery]` 重启 Android 设备（刷机模式|恢复模式）注意：由于很多品牌商对系统的修改的原因`刷机模式`可能不能正常启动
+
+* `adb pull <device> <host>` 拉取 Android 设备上的文件到本地主机，注意本地文件路径不能是根目录，例如：
+  ```
+    adb pull -s WOSWRKP799999999 /sdcard/storage/user.txt d:/adb/
+  ```
+* `adb push <host> <device>` 复制本地主机文件并推送到 Android 设备，如果指定目标文件名已经存在会替换已有文件，例如：
+
+  ```
+    adb push d:/adb/hello.png /sdcard/temp.png
+  ```
+
+* `adb devices [-l]` 查看连接 adb 服务的设备列表，参数 `-l` 仅返回在线设备
+* `adb -s <WOSWRKP799999999> [command]` 如果主机连接有多台设备，想要给指定的设备发命令请用`-s`指定该设备的标识，如果多设备时没有使用`-s`的话 adb 会报错 s
+
+* `adb install [options] <**.apk>` 使用`install`进行安装指定路径的 apk 文件；
+  `options` 可以包含：
+  1.  `-r` 重新安装当前 apk 文件，保留已有数据
+  2.  `-t` 允许安装测试 apk 文件
+  3.  `-g` 授权所有清单文件
+* `adb unistall [-k] <package>` 使用`uninstall`进行指定包名卸载，参数`-k`清除文件
+
+* `adb shell dumpsys package <package>` 查看 app 的相关信息 `重要，重要`
 
 #### 连接 shell
 
-`adb shell` 使用 shell 命令通过 adb 发出设备命令，也可以启动交互式 shell;（连接设备 shell）连接后简单理解直接在 Android 设备上使用命令行，这时就可以使用一些`unix`的命令,当然会有很多`unix`命令是不能忍运行的，这是 Android 内核的安全策略限制引起的，可以使用`adb shell ls /system/bin`进行查看可以使用的`unix`命令
+`adb shell` 使用 shell 命令通过 adb 发出设备命令，也可以启动交互式 shell;（连接设备 shell）连接后简单理解直接在 Android 设备上使用命令行，这时就可以使用一些`unix`的命令,当然会有很多命令是不能执行的，因为它们被厂商`阉割`掉了，这种`阉割`在不同厂商、不同版本的表现还不一致，还有一些是因为 Android 内核的安全策略限制引起的；可以使用`adb shell ls /system/bin`进行查看可以使用的`unix`命令
 
-> 对于`shell`的操作可以一条一条的进行执行，例如： `adb shell pwd`,`adb shell ls`,`adb shell ...`,也可以直接进入到`shell`,然后统一操作
-
+> 对于`shell`的操作可以一条一条的进行执行，例如： `adb shell pwd`,`adb shell ls`,`adb shell ...`,也可以直接进入`shell`然后统一操作
 > 如果要退出`shell`界面，可以使用`ctrl + d` 使用 `exit` 命令也可以
+> 注意：部分需要有 root 权限才可以执行
 
 #### 调用 Activity 管理器(am)
 
@@ -136,15 +155,26 @@ UYT7N17A28000401        device
 ```
 
 - `list package [options] <filter>` 输出所有软件包，或者，仅输出软件包名称包含 filter 中的文本的软件包。
+
   1. `-s`：进行过滤以仅显示系统软件包。
   2. `-3`：进行过滤以仅显示第三方软件包。
   3. `-e`：进行过滤以仅显示已启用的软件包.
   4. `-d`：进行过滤以仅显示已停用的软件包。
   5. `-i`：查看软件包的安装程序。
+
+  ```
+    adb shell pm list packages -3 -i com.tencent
+    adb shell pm list packages | grep com.tencent
+  ```
+
 - `list permission-groups` 输出所有已知的权限组
 - `install [options] <**.apk>` 同上
 - `uninstall -k <package>` 卸载指定的包名的应用
 - `clear <package>` 清除指定包名的应用的所有数据，与刚安装完的状态相同
+
+#### 查看系统信息
+
+- `adb shell dumpsys meminfo <package>` 查看当前包运行的内存情况
 
 #### 查系统日志
 
