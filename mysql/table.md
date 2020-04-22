@@ -29,7 +29,7 @@
     -> info TEXT COMMENT 'user`s info.',
     -> create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'create user time.',
     -> PRIMARY KEY(uid)
-    -> );
+    -> )ENGINE=InnoDB DEFAULT CHARSET=utf8;
   ```
 
   一些常用的修饰 keywords;
@@ -81,7 +81,7 @@
   ```mysql
   ALTER TABLE t_name
     -> DROP [COLUMN]
-  -> exist_column1,exist_column2,...;
+    -> exist_column1,exist_column2,...;
   ```
 
   > COLUMN 关键字可以省略不写,为默认值
@@ -131,12 +131,22 @@
 
 ### 插入数据
 
-- 插入指定字段的数据
+- 插入指定字段的数据,可以一次性插入多条数据,使用逗号隔开
 
   ```mysql
   INSERT INTO t_name (
     -> exist_column1,exist_column2,exist_column3,...
     -> ) VALUES (
+    -> column1_value,column2_value,column3_value,...
+    -> );
+
+  INSERT INTO t_name (
+    -> exist_column1,exist_column2,exist_column3,...
+    -> ) VALUES (
+    -> column1_value,column2_value,column3_value,...
+    -> ),(
+    -> column1_value,column2_value,column3_value,...
+    -> ),(
     -> column1_value,column2_value,column3_value,...
     -> );
   ```
@@ -217,7 +227,7 @@
 ##### SELECT
 
 ```mysql
-SELECT column1,column2,... FROM t_name [WHERE claus];
+SELECT column1,column2,... FROM t_name [WHERE clause];
 ```
 
 > 可以使用`*`代替所有字段.
@@ -230,6 +240,7 @@ SELECT column1,column2,... FROM t_name [WHERE claus];
 
 > 语句中可以使用 `AND` 或 `&&` , `OR` 或 `||` , `IN` , `NOT IN` , `BETWEEN ...AND`条件逻辑
 > 条件逻辑还支持: `>` , `<` , `>=` , `<=` , `=` , `!=` 或 `<>`
+> 语句还支持: `+`,`-`,`*`,`/`,`%`
 
 例如:
 
@@ -246,7 +257,7 @@ SELECT * FROM t_name
 例如:
 
 ```mysql
-SELECT DISTINCT * FROM t_name;
+SELECT DISTINCT[(column_name)] * FROM t_name;
 ```
 
 ##### LIKE
@@ -296,13 +307,22 @@ SELECT * FROM t_name WHERE id > 10 LIMIT 1,10;
 
 > `GROUP BY` 按照所有字段的值条件进行分组;
 
-`GROUP BY column_name`
+`GROUP BY column_name` 默认会返回指定分组的字段的第一条数据
 
 例如:查询数据库中所有 name 的个数
 
 ```mysql
 SELECT name,count(*) FROM t_name GROUP BY name;
 ```
+
+> `group by` 比较多的时候与聚合函数一同使用
+> 聚合函数：`max()`(字段中最大值),`min()`(字段中最小值),`avg()`(字段的平均值),`sum()`(字段的求和),`count()`(字段的总数量)
+
+##### HAVING
+
+> `HAVING` 对使用`GROUP BY`的数据尽心过滤
+
+`GROUP BY column_name HAVING condition`
 
 ##### UNION
 
@@ -327,7 +347,7 @@ SELECT name FROM t_name WHERE age >20
 > `LEFT JOIN` 左连查询
 > `RIGHT JOIN` 右连查询
 
-内联： 参考两个表中满足条件有相同值的.
+- 内联： 参考两个表中满足条件有相同值的.连接的数据表必须有相关的连接字段值.
 
 ```mysql
 SELECT
@@ -345,7 +365,7 @@ SELECT
 
 > 使用的 table JOIN table 时 用 `ON` 进行条件连接;
 
-左连: 会读取左边数据表的全部数据，即便右边表无对应数据。
+- 左连: 会读取左边数据表的全部数据，即便右边表无对应数据。
 
 ```mysql
 SELECT
@@ -361,7 +381,7 @@ SELECT
   -> clause;
 ```
 
-右连:会读取右边数据表的全部数据，即便左边边表无对应数据。
+- 右连:会读取右边数据表的全部数据，即便左边边表无对应数据。
 
 ```mysql
 SELECT
@@ -375,4 +395,15 @@ SELECT
   -> t1.id = t2.uid
   -> WHERE
   -> clause;
+```
+
+- 嵌套连接:可以在`SELECT`,`FROM`,`WHERE`后面使用嵌套
+
+```mysql
+  SELECT *,tem.age FROM (
+    -> SELECT name,age,gender FROM t1_namme
+    -> ) AS tmp
+    -> WHERE
+    -> tmp.age > 10;
+
 ```

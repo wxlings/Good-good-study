@@ -135,3 +135,16 @@
   ```mysql
   SHOW VARIABLES;
   ```
+
+### 命令导入导出数据库
+
+- 导入:使用`source`
+
+```
+source d:/***/user.sql
+```
+
+- 导出:
+  ```
+  mysqldump -u username -p db_name > d:/***/user.sql
+  ```
