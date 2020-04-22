@@ -407,3 +407,18 @@ SELECT
     -> tmp.age > 10;
 
 ```
+
+例如:查找北京区域订单的用户名和手机
+
+```
+SELECT user_name,phone_num FROM user , (SELECT user_id,region FROM morder WHERE region = '北京') AS tmp WHERE id = tmp.user_id
+SELECT user_name,phone_num FROM user u WHERE id in (SELECT user_id,region FROM morder WHERE region = '北京')
+```
+
+例如:查询出每门课都大于 80 分的学生姓名
+
+> 分析需求: 找打每个学生的最低分,如果最低分大于 80,则学生符合要求
+
+```
+SELECT name,MIN(score) as min FROM score GROUP BY name HAVING min > 80
+```
