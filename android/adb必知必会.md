@@ -172,27 +172,37 @@ UYT7N17A28000401        device
 - `uninstall -k <package>` 卸载指定的包名的应用
 - `clear <package>` 清除指定包名的应用的所有数据，与刚安装完的状态相同
 
+#### 查看分辨率
+
+- `adb shell wm size` 查看分辨率
+- `adb shell wm density` 查看像素密度
+- `adb shell dumpsys battery` 查看电池的状态
+- `adb shell cat /proc/cpuinfo` 查看 cpu 信息
+- `adb shell cat /proc/meminfo` 查看内存信息
+
 #### 查看系统信息
 
 - `adb shell dumpsys meminfo <package>` 查看当前包运行的内存情况
+- `adb shell dumpsys cpuinfo <package>` 查看当前包运行的 cpu 使用情况
 
 #### 查系统日志
 
-`logcat [options]` 可以获取到系统的日志信息，需要结合`adb shell`进行使用
+`logcat [options]` 可以获取到系统的日志信息，可以不结合`shell`使用
 详细请[点击](https://developer.android.google.cn/studio/command-line/logcat#filteringOutput "官网")
 
 - `-b` log 模块有个缓存的概念，默认开启`main`,`system`,和`crash`三个缓存域，但是华为 mate10 默认并没有加载`crash`,这个缓存域有一个策略周期性清除
 - `-c` 清除（清空）所选的缓冲区并退出，默认缓冲区集为 main、system 和 crash。要清除所有缓冲区，请使用 -b all -c。
 - `f </sdcard/file>` 把当前日志或缓存域日志信息报存到文件
-- `-s [TAG:property]` 设置日志过滤条件，在 Android 打印的使用：
+- `-s [TAG:property]` 设置日志过滤条件，在 Android 打印的使用：`MainActivity:E`,**重点**
+- `--pid=***` 指定过滤应用的 pid 非常有用,具体的 pid 可以通多`adb shell ps`进行查看,每一次冷启动该值都不一样 **重点**
 
 ```
-  Log.e(TAG,'content') // 日志级别分为'v':'verbose','d':'debug','i':'info','w':'warn','e':'error'
-  adb shell logcat -s SplashActivity:E -f /sdcard/log.txt // 打印`Log.e()`的日志信息
+  Log.e(TAG,'content') // 日志的属性级别分为'v':'verbose','d':'debug','i':'info','w':'warn','e':'error'
+  adb shell logcat -s SplashActivity:E --pid=5682854 -f /sdcard/log.txt // 打印`Log.e()`的日志信息
 ```
 
 打印的格式是 `date time process_id-thread-id/package-name log-level/TAG: content` ,在设置过滤的时候通过`-s`控制`TAG`和日志级别
-例如：`W/MainActivity` 要符合`*:TAG`,其中级别分别对应原生级别大写首字母：`V`,`I`,`D`,`W`,`E`
+例如：`MainActivity:W` 要符合`*:TAG`,其中级别分别对应原生级别大写首字母：`V`,`I`,`D`,`W`,`E`
 
 - `-S` 在输出中包含统计信息，以帮助您识别和定位日志垃圾信息发送者。
 - `-P <whiteList ~blackList>` 设置日志过滤的白名单和黑名单，白名单"list" 就是进程 pid 及 uid ，黑明单就是前面加上"~"
