@@ -255,3 +255,34 @@ UYT7N17A28000401        device
     shell@ $ CREATE TABLE test(id INT(4) AUTO_INCREMENT PRIMARY KEY,name VARCHAR(30) NOT NULL,...)
 
 ```
+
+> 汇总:
+
+`adb start-server` 开启 adb 服务
+`adb kill-server` 结束 adb 服务
+`adb devices` 列出所有设备列表
+`adb -s <****> [command]` 对指定的设备执行命令
+`adb reboot [options]` 重启设备,可选参数:`bootloader`=> 刷卡界面 `recovery`=> 恢复模式;
+`adb install [options] <***.apk>` 安装 apk 文件 ,可选参数:`-r`=> 覆盖安装
+`adb uninstall [-k] <package` 卸载指定包名的 apk ,参数:`-k`=> 清除相关缓存
+`adb push <SOURCE> <DIST>` 推送并复制本地计算机文件 (source) 到 Android 设备指定路径下 (dist)
+`adb pull <SOURCE> <DIST>` 拉取并复制 Android 设备文件 (source) 到本地计算机 指定路径下 (dist)
+`adb shell` 进入设备的`shell`层,可以使用`exit`退出
+
+###### `pm` Android 设备包管理器
+
+`pm list package [opitons] <filter>` 列出并过滤已经安装的包名应用程序,参数:`-3`=> 第三方应用程序,`-s`=> 系统的应用程序,`-i` => 软件包的安装程序 例如:`adb shell pm list -i package com.tencent`
+`pm clear <package>` 清除指定包名的应用程序的数据(和第一次安装的状态相同)
+`pm install <package>` 及 `pm uninstall [-k] <package>` 与上面相同
+
+###### `am` Android 设备程序(ActivityManagerService)管理器
+
+`am [options]`
+`am start <intent>` 启动指定 intent 的 Activity
+`am startService <intent>` 启动指定 intent 的 service
+`am broadcast intent>` 发送指定 intent 的广播
+`am force-stop <package>` 强制停止和指定包名关联的进程
+
+`adb shell screencap /sdcard/.../**.jpg` 截取屏幕,可以使用`adb shell ls -l /sdcard/...**.jpg`进行结果查看
+`adb shell screenrecord [options] /sdcard/.../**.MP4` 部分机该命令被阉割,录制屏幕默认 180s 时间,可以使用`ctrl + c`停止,options: `--limit-time`=> 设置录制时长, `--size WIDTHxHEIGHT`=> 指定视频的分辨率
+`adb shell logcat [options]` 获取系统的日志,options: `-s <TAG/LEVEL>`=> 对日志进行过滤,需要满足格式`MainActivity/E`,`-P`=> 设置日志过滤的白名单,指定应用的进程 id
