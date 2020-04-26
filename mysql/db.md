@@ -84,6 +84,7 @@
 
   ```mysql
   CREATE DATABASE [IF NOT EXISTS] db_name [DEFAULT CHARSET UTF8];
+  CREATE DATABASE [IF NOT EXISTS] db_name [DEFAULT CHARACTER SET='UTF8'];
   ```
 
 - 选择/切换数据库
