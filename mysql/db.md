@@ -57,7 +57,7 @@
 - 连接数据库
 
   ```mysql
-  mysql -u username [-h host] -p
+  mysql [-h host] -u username -p
   ```
 
   > 参数 u root ,参数 h localhost, 参数 p password
@@ -122,7 +122,13 @@
 * 元数据:查看当前数据库版本号,当前用户,数据库名称...
 
   ```mysql
-  SELECT VERTION(),USER(),DATABASE();
+  SELECT VERTION(),USER(),DATABASE(),NOW();
+  ```
+
+* 元数据:查看当前数据库版本号,当前用户,数据库名称...
+
+  ```mysql
+  SELECT VERTION(),USER(),DATABASE(),NOW();
   ```
 
 * 查看当前数据库配置信息

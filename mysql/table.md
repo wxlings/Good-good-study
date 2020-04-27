@@ -279,6 +279,7 @@ SELECT DISTINCT[(column_name)] * FROM t_name;
 
 ```mysql
 SELECT * FROM t_name WHERE name LIKE '_pack' AND mobile LIKE '%8607';
+SELECT * FROM t_name WHERE name LIKE '_pack' AND mobile LIKE '___'; // 长度为5个字符长度
 ```
 
 ##### ORDER BY
