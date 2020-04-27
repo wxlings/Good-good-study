@@ -22,8 +22,8 @@
   CREATE TABLE [IF NOT EXISTS] t_name(
     -> uid INT(length) AUTO_INCREMENT COMMENT 'user`s unique id.',
     -> name VARCHAR(18) NOT NULL COMMENT 'user`s real name.',
-    -> gender ENUM(0,1) DEFAULT 0 COMMENT 'user`s gender,and 0:male & 1:female.',
-    -> age TINY UNSIGNED DEFAULT 18 COMMENT 'user`s age default 18.',
+    -> gender ENUM('0','1') DEFAULT 0 COMMENT 'user`s gender,and 0:male & 1:female.',
+    -> age TINYINT UNSIGNED DEFAULT 18 COMMENT 'user`s age default 18.',
     -> salary FLOAT(8,2) DEFAULT 0.00 COMMENT 'user`s salary.',
     -> mobile CHAR(11) UNIQUE NOT NULL COMMENT 'user`s mobile phone.',;
     -> info TEXT COMMENT 'user`s info.',
