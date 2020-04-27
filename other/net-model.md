@@ -16,3 +16,11 @@ ISO/OSI 七层网络参考模型:
 
 数据封装:
 ![数据分装](https://images2018.cnblogs.com/blog/1116722/201808/1116722-20180831142744701-914791513.png)
+
+网络请求：`GET`,`POST`,`PUT`,`HEAD`,`DELETE`,`OPTIONS`,`PATCH`,....
+
+`GET`: 数据以键值对的方式拼接在 url 后面，例如：`https://www.test.com/login?username=wxling&password=123456`
+`POST`:传参使用请求体时注意,`Content-type`常用两种类型:
+
+1. `x-www-form-urlencoded`:数据同样是使用`key-value`键值对的方式进行拼接,`key=value&key1=value1&key2=value2..`
+2. `form-data`
