@@ -125,8 +125,6 @@
   SELECT VERTION(),USER(),DATABASE(),NOW();
   ```
 
-* 元数据:查看当前数据库版本号,当前用户,数据库名称...
-
   ```mysql
   SELECT VERTION(),USER(),DATABASE(),NOW();
   ```
