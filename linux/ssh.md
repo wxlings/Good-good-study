@@ -2,7 +2,7 @@ ssh命令是openssh套件中的客户端连接工具，可以给予ssh加密协�
 
 
 Client:
-这里需要使用支持`bash`工具，建议使用`Git`客户端，以下假设已经安装了`Git`；
+这里需要使用支持`bash`脚本的工具，建议使用`Git`客户端，以下假设已经正确安装了`Git`客户端；
 
 1. 进入系统的`home`目录（系统都有`home`路径的概念,也就是`~`）
 ```shell
@@ -28,8 +28,14 @@ Client:
 ```shell
     cd ~./ssh
     cat id_rsa.pub
+
+    # 示例：
+    # ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC2CsLpe6woqY+r0UvLq8LcAZtbWacBR7aSPofTHBBAQ2oYItZGawjx10fPXCzog9Ekkngq4M5zu4SwTeyBHMfqfZryj0uIKgzBdir4ybgI0n9cmIhqBGos4LAIFWbf4j+tmRwkf/zEVpsX/666qa8UAmbM3FfdDJ/guWmPn4p596Ho4olXcZrqsyNiDWi423/kdJ7FJ+ZWP/iMlNyQEKcuKv1fD40Qwpc/R7Q8V0Xlsd6lUT09SPudYirmHFG4bMVabHZ4DCSi/U6kzOTyH8+E3XCaZqRmymqOHBNLeGc2q9xvz1bTgcFZxrgBsAQDH8uTdTBKszZBJJxAtm0wQvavS+9sK1nf3pRvjEqtjE6TbulEhPuRApwQY17tVqX+FKfD/W4snXjH91CsIYaPhvehDvE1dHhdi4xladR7UKIFAMMQaOSKlnwu3SHjp3RX+RzTQL1rL21rz0WwlqJLZnZji5wDsPVnKLSG6UYXcTm9wRB56vjP6vwjXrkXVtDl0nE= my-ssh-client
+
+    # head指定了加密类型，tail指定了备注
 ```
-可以直接复制内容然后使用`shell`连接，也可以把文件上传到Linux，然后在操作
+可以直接复制内容然后使用`shell`连接加入linux的authorized_keys文件，也可以把文件上传到Linux，然后再执行编辑操作
+    如果是使用xshell或者putty,直接设置既可
 
 
 Server:
@@ -55,6 +61,7 @@ Server:
     cd ~
     vi authorized_keys
 ```
+    如果是GitHub直接找到ssh模块进行填写即可
 
 这样在客户端就可以使用`bash`工具链接linux了
 `ssh linux_user_name@host_ip [options]`
