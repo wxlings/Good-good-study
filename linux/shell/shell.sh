@@ -1,4 +1,8 @@
+#! /bin/bash
 echo 'This is a shell file!'
+echo $SHELL
+
+
 # 注释
 message='Hello,shell'
 echo $message
