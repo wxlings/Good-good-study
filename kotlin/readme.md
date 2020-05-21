@@ -53,10 +53,11 @@ Kotlin 仍然有‘一切皆对象'的思想,因为jvm的思想没有改变...
 |1 byte|2 byte|4 byte|8 byte|4 byte|8 byte|
 
 > `Byte`的取值范围`-128-127`
+
 装箱问题:
 
 > 数字装箱不一定保留同一性,仅保留了相等性
-> `==` 比较内容,`===` 比较内容与引用
+> `==` 比较内容,`===` 内存地址引用
 
 ```kotlin
     var a:Int = 10000
@@ -78,7 +79,7 @@ Kotlin 仍然有‘一切皆对象'的思想,因为jvm的思想没有改变...
 
 字符型：
 
-`Char` 表示一个字符
+`Char` 表示一个字符,使用单引号`''`进行包裹
 
 Boolean类型：
 
@@ -87,9 +88,47 @@ Boolean类型：
 
 **引用数据类型**
 
-String
+String:
 
-Array
+```kotlin
+    var str:String = "My name is Hello!"
+    for(item in str){
+        println(item)
+    }
+```
+
+*字符串模板*
+
+> 使用 `$var` 或者 `${fun}` 进行引用,注意要使用双引号
+
+```kotlin
+    var name="Jesson"
+    var str = "My name is $name,and I`m ${getAge(1996)} years old;"
+    println("$name.length is ${name.length} !")
+    var msg = """
+        hello,
+        world!
+    """
+    
+```
+Array: 数组
+
+默认提供了`get`,`set`,`size`属性
+创建数组：`arrayOf`/`arrayOfNull` 或者 工厂函数：`Array(size,{i})`
+```kotlin
+    var arr = arrayOf("H","e","l","o")
+    arr.set(2,"name")
+    var value = arr.get(2)
+    var length = arr.size
+    arr = arraryOfNulls<Int>(20) // 创建size为20,内容都为null的数组
+    arr = Array(10,{i -> i+2}) // 2,4,6,8,10,...工厂函数默认创建Int类型数组,默认由0开始
+
+    arr fl = FloatArray(3) // 0.0
+    arr do = DoubleArray(10) 
+    arr bo = BooleanArray(2) // false false
+```
+系统还对基本数据类型进行扩展,`ByteArray`,`ShortArray`,`IntArray`,`LongArray`,`FloatArray`,`DoubleArray`,`CharArray`,`BooleanArray`,经过扩展后的数组不在需要初始化
+
 
 
 `fun` 声明函数
