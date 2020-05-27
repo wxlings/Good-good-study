@@ -132,3 +132,134 @@ Array: 数组
 
 
 `fun` 声明函数
+
+#### 条件控制
+
+`if-else` 支持基本用法：
+
+```kotlin
+    var a = 10
+    var b = 15
+    var max:Int
+    if (a > b){
+        max = a
+    } else {
+        max = b
+    }
+
+    // 也可以写作 ：
+    max = if (a > b) a else b
+
+    // 也可以写作：
+    max = if (a > b){
+        println("a>b")
+        a
+    } else {
+        println("a<b")
+        b
+    }
+```
+
+`in` 区间 :判断 `target` 是否在指定的整数区间内,用`..`表示范围区间
+
+```kotlin
+    var a = 5
+    if (a in 1..8){
+        println("a in 1..8")
+    }
+```
+
+`when-else` 类似`swich`,把参数和所有条件进行比较,直到满足条件,`else` 等同于`default`
+
+```kotlin
+    var x = 10
+    when (x) {
+        1 -> println("x=1")
+        in 2..5 -> println("x in 2..5")
+        !in 5..7 -> println("!in 5..7")
+        8,9,10 -> println("8,9,10")
+        else->{
+            println("Not in 1-10")
+        }
+    }
+```
+
+#### 循环
+
+`for` 循环可以对任何提供迭代器（iterator）的对象进行遍历
+
+```kotlin
+     for ( i in 1..10){
+        println(i)
+    }
+
+    val str = "Hello,world"
+    for (i in str){
+        println(i)
+    }
+
+    val array = arrayOf("Hello",",","world","!!@")
+    for (i in array){
+        println(i)
+    }
+    for (i in array.indices){
+        println("$i -> ${array[i]}")
+    }
+    for ((index,item) in array.withIndex()){
+        println("$index -> $item")
+    }
+```
+
+`while`与`do-while` 用法与java完全相同,不在描述
+
+> 注意： `do-while` 先执行一次再进行条件判断
+
+`break` 与 `continue` 作用与用法与java完全相同,
+
+> 在 Kotlin 中任何表达式都可以用标签（label）来标记。 标签的格式为标识符后跟 @ 符号
+
+
+### 类与对象
+   
+Kotlin 类可以包含：构造函数和初始化代码块、函数、属性、内部类、对象声明。
+Kotlin 中使用关键字 `class` 声明类
+在 Kotlin 中的一个类可以有一个主构造函数以及一个或多个次构造函数。主构造函数是类头的一部分：它跟在类名（与可选的类型参数）后。
+如果想要重写默认构造方法还是比较麻烦的，尤其是次构造方法
+
+```kotlin
+
+    class Person(var name:String,var age:Int,var gender:Char){
+
+        constructor(name:String):this(name,0,'M') // 声明了次级构造函数，必须要指定到主构造方法参数
+
+        var phone:String = ""
+        get() {
+            return if (field.length == 11) field else "null"
+        }
+        set(value) {
+            if (value.length == 11){
+                field = value
+            }
+        }
+
+        init {
+            println("初始化...相当于构造方法执行")
+        }
+    
+        fun say(msg:Any){
+            println("$name say: $msg")
+        }
+        fun getUserInfo():String{
+            val other:Any = "Phone=>$phone"
+            return "Name:${this.name},\nAge:${this.age},\nGender:${if (this.gender == 'M') "Male" else "Female"},\nOther:\n$other"
+        }
+    }
+
+    // Kotlin 并没有 new 关键字
+    var person = Person("Jeck",20,'F')
+    person.say("Hello,world!")
+    person = Person("Lanbo")
+    person.phone = "1388888888"
+    val info = person.getUserInfo()
+    println(info)
+```

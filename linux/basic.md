@@ -15,17 +15,26 @@
 
 - **`pwd` print working directory 打印当前路径**
 
-- **`cd` change directory 切换路径**
-
 - **`date` date 打印当前系统时间** 
 
 - **`history <n>` 打印历史限制n个最近命令,默认全部**
 
 - **`type <command>`显示命令的位置**
 
+- **`./jemeter.sh`** 执行一个可执行文件 
+
 #### 
 #### 文件基本操作
 #### 
+
+- **`cd` change directory 切换路径**
+  
+  `cd [options] <dest>`
+
+  ```shell
+      cd ~ # 切换到HOME
+      cd # 切换到HOME
+  ```
 
 - **`ls` list 列出文件列表**
 
@@ -36,10 +45,10 @@
 
   ```shell
       ls # 默认当前路径
-      ls -l /usr/local/bin
+      ls -l /usr/local/bin # 等同于'll'
   ```
 
-- **`cp` copy 复制/并重命名文件**
+- **`cp` copy 复制(并重命名)文件**
 
   `cp [options] <source> <dest>`
 
@@ -73,6 +82,10 @@
   - `-f` force 强制拷贝,如果有相同的文件名强制覆盖
   - `-i` interactive 交互,每移除一个文件时都会提示给出弹窗
 
+  ```shell
+      rm rf /usr/local/log/temp
+  ```
+
 - **`mkdir` make directory 创建路径**
 
   `mkdir [options] <desc>`
@@ -84,7 +97,7 @@
       mkdir -m 711 -pv /usr/local/test/1/2/3/4/5/6/7
   ```
 
-- **`rmdir` remove directory 移除路径**
+- **`rmdir` remove directory 移除空的路径**
 
   `mkdir [options] <desc>`
 
@@ -131,7 +144,7 @@
   ```shell
       tar -zcvf archive.tar 1.txt 2.log 3.zip files/4.md # 打包并压缩1，2，3/4等文件到archive.tar文件
       tar -tvf archive.tar # 查看.tar文件内容
-      tar -zxvf archive.tar # 解压文件包
+      tar -zxvf archive.tar # 解压文件包到当前目录
   ```
 
 - **`gzip` 压缩/解压缩文件,会生成或者解压`.gzip`文件**
@@ -174,7 +187,7 @@
     scp root@192.168.101.13:/home/res/a.md d:/lin # 由linux下载到本地
     scp -r www.baidu.com:/home/ d:/ln/ # 也可以使用域名
   ```
-> 注意`scp`只能传输`regular`文件,如果是文件夹的话需要使用`-r`参数
+  > 注意`scp`只能传输`regular`文件,如果是文件夹的话需要使用`-r`参数
 
 - **`zip/unzip` 插件/工具：解压缩文件,需要使用`yum`/`apt`进行安装**
 
@@ -193,20 +206,32 @@
 
     `find path -option [ -print ] [ -exec -ok command ] {} \;`
 
-    - `-amin <n>` 过去 n 分钟被读取的文件
-    - `-cnewer file` 过去 n 分钟创建的文件
-    - `-atime <n>` 过去 n 天内被读取的文件
-    - `-cmin <n>` 过去 n 分钟内被修改的文件
-    - `ctime <n>` 过去 n 天内被修改的文件
-    - `-empty` 空文件
-    - `-name/inamne <str>` 文件名符合 str 的文件(iname 忽略大小写)
-    - `-type` 过滤指定类型的文件: `f` 一般文件,`d` 文件夹文件
-    - `size` 过滤文件大小
+      `(N can be +N or -N or N): -amin N -anewer FILE -atime N -cmin N
+      -cnewer FILE -ctime N -empty -false -fstype TYPE -gid N -group NAME
+      -ilname PATTERN -iname PATTERN -inum N -iwholename PATTERN -iregex PATTERN
+      -links N -lname PATTERN -mmin N -mtime N -name PATTERN -newer FILE
+      -nouser -nogroup -path PATTERN -perm [-/]MODE -regex PATTERN
+      -readable -writable -executable
+      -wholename PATTERN -size N[bcwkMG] -type [bcdpflsD] -uid N
+      -used N -user NAME -xtype [bcdpfls]      -context CONTEXT`
+
+    - `-amin <n>` File was last accessed n minutes ago.
+    - `-atime <n>` 过去 n 天内被访问的文件
+    - `-cmin <n>` File's status was last changed n minutes ago.
+    - `-ctime <n>` 过去 n 天内被修改的文件
+    - `-mmin <n>` File's data was last modified n minutes ago.
+    - `-mtime <n>` 过去 n 天内被修改过属性的文件
+    - `-empty` File is empty and is either a regular file or a directory. (蛋疼会找空的文件)
+    - `-name/inamne <pattern>` 文件名符合 str 的文件(iname 忽略大小写) 支持(`*`, `?`,`[]`)进行文件名称匹配
+    - `-type [options]` 过滤指定类型的文件: `f` regular file ,`d` directory , `l` link file
+    - `-user <uname>` File is owned by user uname
+    - `-size +/- <n[c/k/M/G]>` 过滤文件大小(`+/-`大于/小于参数，`c`:bytes,`k`:kb,`M`:Mb,`G`:Gb)
+    - `-writable`,`-readable`,`-executable` 可写，可读，可执行的属性
 
   ```shell
-      find . -name "*.log" # find 当前目录下以.log结尾的文件
-      find /usr/ -type f -cmin 10
-      find / -size +500M 
+      find . -iname *.log # find 当前目录下以.log结尾的文件
+      find /usr/ -type d -cmin 10
+      find / -size +500M  # find 单文件容量大于500M的所有文件
   ```
 
 > **总结: 对文件操作时,一般 `-r`是递归完成指令,`-f`是强制完成指令, `-i` 是由需要时给出提示 ,`-v`显示执行过程**
@@ -238,7 +263,6 @@ ___
   *`回车键` 移动下一行*
   *`空格键` 移动下一页*
   *`b` 向上翻一页*
-  *`u` 向上翻半页*
   *`f` 向下翻一页*
   *`d` 向下翻半页*
   *`q` quit 退出阅读模式,或者`ctrl +c`*
@@ -281,10 +305,9 @@ ___
   - `-f` follow 监听文件,**常用于监听日志,抓取指定日志,进入等待模式**
   - `-F` follow retry
 
+  ```shell
+    tail -F /usr/local/src/www/login.log
   ```
-  tail -F /usr/local/src/www/login.log
-  ```
-
 ___
 
 #### 
@@ -297,14 +320,103 @@ ___
   `grep [options] <str> <dest>`
 
   - `-c` count 计算符合样式的行数
-  - `-C <n>` 除了显示符合样式的那一行之外，并显示该行之前后各n行的内容
-  - `-i` ignore 忽略字符串匹配大小写
   - `-r` 使用递归的方式查文件夹
+  - `-A <n>` after 找到目标的后n行
+  - `-B <n>` before 找到目标的前n行
+  - `-C <n>` 找到目标词汇的前后n行
+  - `-v <str>`  
 
-- `sed`
+  ```shell
+      grep -C 10 "error" php_access_log.txt # 查找文件中包含关键词的前后各10行的内容
+  ```
 
+- `sed` 一种在线编辑器，一次处理一行数据
+  
+  > 多用于行数据处理
 
-- `awk`
+  `sed [options] 'n [,m] action'`
+
+  options:
+  - `-n` --silent,quiet 沉静的，**如果没有指定该参数那么在使用action/p(打印)中指定的行号无效**
+  - `-i` 默认所有的操作都是在使用内存的副本，并不对文件本身进行修改，如果需要修改文件就需要使用`-i`参数
+  
+  actions:
+  格式：[n,[m]] function
+  - `-a` 新增行，需要指定在第几行后追加，可以标记新增行的内容，例如：`2a hello,world`
+  - `-c` 替换行
+  - `-d` 删除行，不可与`option`中的`-n`同时使用
+  - `-i` 插入行
+  - `-p` [指定行号/查询]打印，如果指定了行号需要联合`option`中的`-n`使用
+  - `-s` 替换，直接进行取代工作; `s/source/target/g`全局替换
+
+  ```shell
+      sed '2p' data.ini # 打印所有内容，没有指定'-n'参数默认打印全部行数
+      sed -n 'p' data.ini # 打印所有行内容
+      sed -n '2,4p' data.ini # 打印第2行-第4行内容
+      sed '3d' data.ini # 删除第3行，这里不需要加`-n`参数，只是删除显示中数据不会删除元数据
+      sed '2a hello,word' data.ini # 在第2行后新建行插入hello.word
+      sed -n '/hello/p' data.ini # 打印包含字段的行
+      sed -i 's/hello/world/g' data.ini # 替换文件中全部的hello字段为world
+      sed 's/ /hello/g' data.ini | sort | uniq -c | sort -r | head -5 # 查一篇文章中出现频率最高的5个词
+  ```
+
+- `awk` 对文件进行格式化的工具
+
+  > 多用于列数据进行处理
+
+  `awk [options] 'pattern{action}' file,file,...`
+  
+  options: 
+  - `-F` --field-separator指定分割符，以分隔符为标识把行数据进行分割为多列；默认为空白字符
+
+  pattern：符合pattern的才会传递给action(简单理解为符合该条件)可以使用`&&`,`||`...等逻辑判断符
+  - `$n` 可以直接获取第n列的值与指定条件比较，例如：`$2=="order"`
+  - `NF` 分割后的字段列的数量(支持==,>,<等比较操作)
+  - `NR` 当前行的行号
+  
+
+  action : 
+  - `print $n` 打印第n列($n)数据内容
+
+  ```shell
+      awk '{print "TAG:" $5," msg:" $6}' php_login_0202.log # 输出文件中以空白字符为分割标识后的第5列及第6列的内容
+      awk -F '-' 'NF>=4 && ($1=="order"||$1=="t_order") {print  "uid:" $2,"order_id:" $4}' php_order_all.log # 输出文件中指定以`-`分割且分割后列数>=4的行信息中第2列及第4列的内容
+      awk '{print $7}' php_access_log.txt | awk -F '?' '{$1}'| sort | uniq -c | sort -rn | head -10
+  ```
+
+ > 涉及第几列的数据优先使用`awk`，因为`awk`会对行依据分隔符进行分列，有列的概念
+
+- `sort` 把文件内容中以行为单位进行比较，按照首字符向后
+
+  - `-r` reverse 反转
+  - `-n` numerical value 数值
+
+  > 通常会和其它命令联合使用，例如：`uniq`,`awk`
+
+  ```shell
+      sort -rn login.log # 排序文件中的行数据
+  ```
+
+- `uniq` 去重，去除重复数据，前提条件是**相邻数据相同**才会被执行去重
+
+  > 在使用  `uniq`之前要用`sort`进行排序，目的是使相同的数据相邻，这样`uniq`才会更准确
+  
+  - `-c` 统计出现的次数
+
+  > 通常会和其它命令联合使用，例如：`sort`,`awk`
+
+  ```shell
+       awk -F "," 'NF>2 {print $1,$2}' awk.txt | sort | uniq -c | sort -rn | head -3 # 读取文件以','进行分割，满足至少两个字段后进行过滤然后按照出现频率又少到多进行排序 
+  ```
+
+---
+
+总结：
+  `awk` 适合对行内有规律的列数据进行处理，通常用于找到(行分割后的)列数据进行统计分析，较多情况需要结合`sort -rn`,`uniq -c`使用
+  `sed` 适合对行数据进行处理,可以增删改查  用于修改文件内容例如：`sed -i 's/source/target/g file'
+  `grep` 适合对文本数据进行过滤处理  较多使用`-C <n>`过滤文件关键字
+
+---
 
 #### 
 #### 磁盘系统
@@ -393,6 +505,8 @@ ___
 #### 安装软件包
 #### 
 
+- `rpm` 
+
 - **`yum` Centos发行版本的包管理器,使用于`yum源`上已有的资源**
 
   - `list <package>` list packages based on package names
@@ -415,14 +529,72 @@ ___
 - **`wget` 插件/工具：文件下载器,需要使用`yum`/`apt`进行安装**
 
 
-- `systectl` 服务控制器
 
-  ```
-  systemctl start mysqld.service
-  systemctl stop mysqld.service
-  systemctl restart mysqld.service
+#### 系统相关
+
+- `ip` how / manipulate(操纵) routing, network devices, interfaces and tunnels
+
+  > `ifconfig` 默认centos7及Ubuntu都已经去掉了该工具,可以使用`sudo yum/apt instatll -y ifconfig`进行安装
+
+  - `addr/address` 查看IP地址 protocol (IP or IPv6) address on a device.
+  - `route` 路由主机 routing table entry.
+  - `link` network device.
+
+- `systectl` 服务控制器 Control the [systemd](http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html) system and service manager
+
+  > `systemctl`暂且可以看作是命令`service`的升级兼容版本
+  > 同时等效于直接启动`/etc/init.d/<service_name> [options]`
+
+  `systemctl [options] <test>` [`status` | `start` | `stop` | `restart`(restart service) | `force-reload`(reload config file)`]
+
+  ```shell
+      systemctl start mysqld.service
+      systemctl stop mysqld.service
+      systemctl restart mysqld.service
   ```
 
-- `ps` process status 进程状态(类似 windows 的任务管理器)
-  - `-auxf`
-  - `-ef`
+- `ps` process status 进程状态(类似 windows 的任务管理器) report a snapshot of the current processes.ps displays information about a selection of the active processes.
+
+  `ps [options]`
+
+  - `-auxf` To see every process on the system using BSD syntax
+  - `-ef` To see every process on the system using standard syntax
+  - `-ejH` To print a process tree
+
+  ```shell
+      ps -ef | grep sshd # 使用标准的语法查看系统进程，并使用grep进行过滤
+      ps -aux | grep sshd # 使用bsd语法查看系统进程，
+      ps -ejH
+  ```
+  > Notes:可以用于查看指定应用的进程是否已经启动
+
+- `kill` send a signal to a process 发送一个信号给进程
+
+  >  `kill` 有多个signal，可以使用 `kill -l`查看,参数`-9`是`SIGKILL`杀掉进程
+
+  `kill [options] <pid>`
+
+  ```shell
+      kill -9 -1 # Kill all processes you can kill.
+  ```
+
+- `nohup` 以后台进程的方式启动,避免控制台阻塞式启动
+
+  `nohup [opitons]`
+
+  ```shell
+      nohup ./jemter.sh > run.log # 以后台的方式运行./jemeter.sh 并把输出信息保存到run.log文件
+  ```
+  > 如果没有权限运行可以先确认脚本文件是否有`x`可执行权限,使用`chmod +x <file>`增加可执行属性
+  > 如果用户角色权限不够请切换`su`,·sudo passwd root·修改root密码
+
+- `netstat` 显示协议统计信息和当前 TCP/IP 网络连接 prints information about the Linux networking subsystem. 
+  
+  `netstat [options]`
+
+  - `-a` 显示所有连接
+  - `-n` 以数字形式显示地址和端口号
+
+  ```shell
+      netstat -anp | grep 3306
+  ```
