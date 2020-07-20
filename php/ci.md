@@ -4,6 +4,22 @@ CI是基于MVC模式的php框架:
 `C`即`Controller`核心控制器,无论是接口查数据还是显示页面都需要控制器进行处理,所有的`controller`都要继承`CodeIgniter\Controller`或者`App\BaseController`,文件都要卸载`App\Controller`目录下
 
 
+在`Base_Controller`的构造器中获取了`$this->params = array_merge($request->getPost(),$request->getGet());`所有的接口传参数都在`$this->params`数组中;
+
+首页: 通过`Welcome.php/__construct()` -> `site_model.php/getAdminschame()` 获取 `adminscame.php`中的配置设置到`_data`中,然后在把该值赋值给`Welcome.php/index()`,return `Views/welcome/index.php`进行页面渲染view;
+
+整个后台用到的样式都是`MetronicApp`
+
+
+>>  在写页面的时如果php和html混合时.php代码块一定要有`end`结束符
+```php
+  <?php if (condition): ?>
+  <li>hello</li>
+  <?php endif; ?>
+
+  <?=view('welcome/helo')?> // 插入指定的view
+
+
 #### 数据库
 
 - 数据库配置,
