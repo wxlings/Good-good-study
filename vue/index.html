@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        
+        h3{
+            color: brown;
+        }
+        #user_info{
+            background-color: azure;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .auto{
+            width: 400px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>这是h1标签</h1>
+    <hr>
+    <p>这是一个段落标签</p>
+    <hr>
+    <div id="user_info">
+        <h3>个人信息</h3>
+        <hr>
+        <div>
+            <div>姓名：{{user.name}}</div>
+            <div>年龄：{{user.age}}</div>
+            <div>性别：{{user.gender}}</div>
+            <div>信息：{{user.info}}</div>
+        </div>
+        <hr>
+        <img class="auto" :src="image_url" alt="这是一个随机图片">
+    </div>
+
+    <div id="vue">
+        <h2>{{title}}</h2>
+        <a :href="url" target="">进入官网</a>
+    </div>
+    
+
+    <script>
+        let user = new Vue({
+            el:'#user_info',
+            data:{
+                user:{
+                    name:'王君歌',
+                    age:3,
+                    gender:'女',
+                    info:'小可爱'
+                },
+                image_url:'https://tse2-mm.cn.bing.net/th/id/OIP.7uCkVcryBNI29E9C73wMSAHaEZ?w=297&h=180&c=7&o=5&pid=1.7',
+            }
+        })
+        let vue = new Vue({
+            el:'#vue',
+            data:{
+                title:'Vue相关信息',
+                url:'https://cn.vuejs.org/v2/guide/index.html',
+            }
+        })
+    </script>
+</body>
+</html>
+<!-- 说明：
+    引入Vue.js有两种：
+    1. 直接在head中使用<script src="https://cdn.jsdelivr.net/npm/vue"></script>(生产环境,有压缩速度快)或者<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>（开发环境,有错误提示）
+    2. 每引入一个 new Vue({params}) 实例会对应一个上下文,通常一个页面只有一个Vue实例
+-->
