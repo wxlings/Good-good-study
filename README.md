@@ -10,3 +10,5 @@ VS.code 插件安装：
 
 设置终端：使用`bash.ext`替换默认`cmd`
 `terminal.integrated.shell.windows ：'../../bin/bash.exe'`
+
+Code review : 代码审查,目的:改善和保证代码质量.还有更能促进团队沟通及学习
