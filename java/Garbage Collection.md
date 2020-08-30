@@ -14,3 +14,11 @@ Object creation is done by code you write; and frameworks you use to use their p
   To start with, GC defines some specific objects as Garbage Collection Roots.  Now GC traverses the whole object graph in your memory, starting from those roots and following references from the roots to other objects. Every object the GC visits is marked as alive.   C遍历内存中的整个对象图，从这些根开始，并遵循根对其他对象的引用。GC访问的每个对象都被标记为活动的。
   
 2. Removing unreachable objects - 放弃那些已经die 或者不可用的对象
+
+
+##### 复制算法
+将可用内存一份为二,即原有100M,
+优点:解决内存碎片的问题
+缺点:触发Gc比较频繁
+
+###### 标记压缩算法
