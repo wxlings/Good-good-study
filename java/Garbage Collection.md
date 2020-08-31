@@ -22,3 +22,6 @@ Object creation is done by code you write; and frameworks you use to use their p
 缺点:触发Gc比较频繁
 
 ###### 标记压缩算法
+
+
+###### 分代搜集算法

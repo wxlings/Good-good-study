@@ -92,7 +92,7 @@ While the constructor of Message is public, the best way to get one of these is 
 ```
 
 ###### Message对象缓存是怎么实现的呢?
-
+ 
 这里是重点,本身是一个链表结构,有对象了就会通过`next`指向到下一个对象
 
 ```java
@@ -397,6 +397,27 @@ When a process is created for your application, its main thread is dedicated to 
 由构造器看出在初始化Handler时必须要持有一个与当前线程关联Looper对象.如果在子线程中我们由传入MainLooper就需要在调用`Looper.prepare()`来创建当前线程中的Looper对象
 为什么在主线程中没有创建Looper对象呢? 是因为在ActivityThread初始化的时候就创建了Main Looper对象
 
+```java
+    
+    public static void main(String[] args) {
+        Looper.prepareMainLooper();//创建Looper和MessageQueue对象，用于处理主线程的消息
+    
+        ActivityThread thread = new ActivityThread();
+        thread.attach(false);//建立Binder通道 (创建新线程)
+    
+        if (sMainThreadHandler == null) {
+            sMainThreadHandler = thread.getHandler();
+        }
+    
+        Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
+        Looper.loop();
+    
+        //如果能执行下面方法，说明应用崩溃或者是退出了...
+        throw new RuntimeException("Main thread loop unexpectedly exited");
+        ...
+
+```
+
 ###### 消息入队
 
 当我们调用了`sendMessage()`或者`postMessage()`发生了些什么?
@@ -451,3 +472,14 @@ When a process is created for your application, its main thread is dedicated to 
     }
 ```
 ![Handler](https://github.com/wxlings/Good-good-study/blob/master/static/img/handler.jpg)
+
+
+##### todo Handler中有Loop死循环，为什么没有阻塞主线程，原理是什么？ 
+https://blog.csdn.net/jdsjlzx/article/details/108222678
+
+
+##### Handler 内存泄漏问题 ...
+
+1. 弱引用Handler对象
+2. 合理使用`handler.removeCallbacksAndMessages(null)`
+2. 在子线程中创建Handler时,使用完成后需要调用`Looper.myLooper().quitSafely()`

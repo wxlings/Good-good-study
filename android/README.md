@@ -8,6 +8,34 @@ Android 系统架构:
 版本:
 L5,M6,N7,O8,P9
 
+https:
+从Android9.0开始应用程序默认只允许使用https协议进行网络请求,http默认有安全隐患不再被支持
+
+解决办法:
+
+1. 在`res/xml`目录下创建文件`network-config.xml`文件
+2. 添加声明一下内容:
+```xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <network-security-config xmlns:android="http://schemas.android.com/apk/res/android">
+        <base-config cleartextTrafficPermitted="true">
+            <trust-anchors>
+                <certificates src="system"/>
+            </trust-anchors>
+        </base-config>
+    </network-security-config>
+```
+3. 在`AndroidManifest.xml`文件中的`Application`标签中使用
+```xml
+     <application
+        ...
+        android:networkSecurityConfig="@xml/network_config">
+```
+
+网络请求: 
+Okhttp: 侧重网络请求的底层实现
+Rtrofit: 侧重上层应用封装
+
 四大组件:
 Activity,Service,BroadcastReceiver,ContentProvider
 
