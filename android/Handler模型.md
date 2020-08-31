@@ -35,7 +35,8 @@ While the constructor of Message is public, the best way to get one of these is 
         return new Message();
     }
 ```
-> 虽然我们可以直接通过`new Massage()`的方式创建实例,但是更应该使用`Message.obtain()`的形式获取缓存对象
+
+> Notes: 虽然我们可以直接通过`new Massage()`的方式创建实例,但是更应该使用`Message.obtain()`的形式获取缓存对象;
 
 
 ###### Message可以装载那些类型数据呢 ?
@@ -69,6 +70,34 @@ While the constructor of Message is public, the best way to get one of these is 
      * 可以通过使用setData()传入一个Bundle对象
      */
      /*package*/ Bundle data;
+
+    /**
+     * Recycles a Message that may be in-use.
+     * Used internally by the MessageQueue and Looper when disposing of queued Messages.
+     */
+     void recycleUnchecked() {
+        // Mark the message as in use while it remains in the recycled object pool.
+        // Clear out all other details.
+        flags = FLAG_IN_USE;
+        what = 0;
+        arg1 = 0;
+        arg2 = 0;
+        obj = null;
+        replyTo = null;
+        sendingUid = -1;
+        when = 0;
+        target = null;
+        callback = null;
+        data = null;
+
+        synchronized (sPoolSync) {
+            if (sPoolSize < MAX_POOL_SIZE) {
+                next = sPool;
+                sPool = this;
+                sPoolSize++;
+            }
+        }
+    }
 ```
 
 
@@ -115,36 +144,9 @@ While the constructor of Message is public, the best way to get one of these is 
         }
         return new Message();
     }
-
-    /**
-     * Recycles a Message that may be in-use.
-     * Used internally by the MessageQueue and Looper when disposing of queued Messages.
-     */
-    void recycleUnchecked() {
-        // Mark the message as in use while it remains in the recycled object pool.
-        // Clear out all other details.
-        flags = FLAG_IN_USE;
-        what = 0;
-        arg1 = 0;
-        arg2 = 0;
-        obj = null;
-        replyTo = null;
-        sendingUid = -1;
-        when = 0;
-        target = null;
-        callback = null;
-        data = null;
-
-        synchronized (sPoolSync) {
-            if (sPoolSize < MAX_POOL_SIZE) {
-                next = sPool;
-                sPool = this;
-                sPoolSize++;
-            }
-        }
-    }
 ```
-本生Message是一个静态实例,是用`sPool = m.next`进行获取,这种做法相当于我们写一个类类里面有一个静态集合,然后获取实例时去集合里面拿走,用完后再放回链表集合;
+
+Message本身就是单列表的数据结构,next指向了下一对象;在消息入队列的时候用了这个逻辑,当回收以后也用了这个逻辑
 
 
 ##### MessageQueue
@@ -203,7 +205,19 @@ You can retrieve the MessageQueue for the current thread with {Looper#myQueue() 
     // 
     void removeMessages(Handler h, int what, Object object) {
         ...
+        p.recycleUnchecked();
+        ...
     }
+
+    // 获取下一Message对象
+     Message next() {
+         ...
+        for (;;) {
+            nativePollOnce(ptr, nextPollTimeoutMillis);
+            ...
+    
+        }
+     }
 ```
 
 ##### Looper
@@ -478,8 +492,35 @@ When a process is created for your application, its main thread is dedicated to 
 https://blog.csdn.net/jdsjlzx/article/details/108222678
 
 
-##### Handler 内存泄漏问题 ...
 
-1. 弱引用Handler对象
-2. 合理使用`handler.removeCallbacksAndMessages(null)`
-2. 在子线程中创建Handler时,使用完成后需要调用`Looper.myLooper().quitSafely()`
+### 面试题系列
+
+
+- Handler 会内存泄漏么? 为什么? 怎样避免?
+
+Handler 会引起内存泄漏,在Handler对象发送消息时最终会调用`enqueueMessage()`把新的消息加入到MessageQueue中,这个时候需要把当前Handler对象赋值给Messages.target,如果Handler使用不当比如在执行定时任务或者延时任务的时候就会造成Handler不能被回收,这就有可能造成当前Activity不能回收,造成内存泄漏;
+
+解决: 在合适的声明周期调用`Handler().removeCallbacksAndMessages(null)`进行资源移除,这个方法最终会调用`Message.recycleUnchecked()`进行释放Message的所有引用,包括target;还有如果在子线程中创建Handler-Looper模型,当任务执行结束时还要调用`Looper.quit()`结束loop()中的死循环;
+
+
+
+- Message 了解多少? 为什么要用Message.obtain()?
+
+Message 可以包装多类型的数据,用作于数据的承载者;Message本身是单列表的数据结构
+特点是:非线性,非连续物理内存,随机存储,但是按顺序查找,通过next指向下一个对象的引用
+由于Handler 在Android系统中非常频发的使用,特别是在线程切换,UI处理等方面,对于Message对象进行了缓存复用的处理逻辑,做到了优化内存及性能;
+如果使用Array的数据结构,可能面临数据量增加时数组需要扩容及内存复制的问题或者数据量较小而浪费内存的问题
+
+
+
+` Looper 和线程的关系?
+
+一个线程中只可以有一个Looper对象,但是Handler可以有多个;主线程中在ActivityThread创建的时候就通过`Looper.getMainLooper()`获取了Looper对象;而如果在子线程中需要调用`Looper.prepare()`进行获取Looper对象,比较典型的类是HandlerThread,在开启线程执行任务的时候获取了线程的Looper 对象,然后把Looper对象传递给了对应的Handler,要注意,当任务执行完毕后要调用`HandlerThread().quit()`    
+
+
+
+- Handler/Looper.loop()的死循环为什么不会导致ANR? 会持有cpu资源么?
+
+在Looper.loop()方法中有个for无限循环来获取队列中的Message对象, `Message msg = queue.next(); // might block` `next()`可能是阻塞的,意思就是没有消息就会阻塞,这里阻塞和我们正常接触的线程阻塞是不一样的,在这个方法中会调用Native 方法`nativePollOnce()`,这里就涉及Linux的epoll机制，是一种IO多路复用机制,以同时监控多个描述符，当某个描述符就绪(读或写就绪)，则立刻通知相应程序进行读或写操作，本质同步I/O，即读写是阻塞的。此时主线程会释放CPU资源进入休眠状态，所以说，主线程大多数时候都是处于休眠状态，并不会消耗大量CPU资源。
+
+
