@@ -112,7 +112,7 @@ String:
     
 ```
 Array: 数组
-
+**数组初始化后是不可以扩容的;**
 默认提供了`get`,`set`,`size`属性
 创建数组：`arrayOf`/`arrayOfNull` 或者 工厂函数：`Array(size,{i})`
 ```kotlin
@@ -128,6 +128,48 @@ Array: 数组
     arr bo = BooleanArray(2) // false false
 ```
 系统还对基本数据类型进行扩展,`ByteArray`,`ShortArray`,`IntArray`,`LongArray`,`FloatArray`,`DoubleArray`,`CharArray`,`BooleanArray`,经过扩展后的数组不在需要初始化
+
+List: 集合
+
+```kotlin
+// 不可扩容list
+val list = listOf("h","e","l","l","o")  //这种list是不可以扩容的,和数组一样,创建完只能更改内容
+val value = list[0]  //对于list的方法就有很多了
+// list.add(8)         // 没有方法
+
+// 可变list
+val mutableList = mutableListOf<Int>(1,2)
+mutableList.add(3)
+mutableList.add(4)
+
+// 返回一个空的ArrayList,等同于  mutableListOf<Int>()
+val arrayList = arrayListOf<Int>()
+```
+
+Set : 集合  `interface Set<out E> : Collection<E>` 实现了Collection接口 和 list 属于一类
+
+```kotlin
+    // read-only 没有add()
+    val set = setOf<Int>(0,1,2,3)
+    val size = set.size 
+
+    // 可扩容
+    val mutableSet = mutableSetOf<Int>()
+    mutableSet.add(10)
+
+````
+
+Map : 键值对映射 
+
+```kotlin 
+
+    // Returns an empty read-only map.
+    val map = mapOf<Int,String>(0 to "0",1 to "1")
+
+    // 动态数据
+    val mutableMap =  mutableMapOf<Int,String>()
+    mutableMap[2] = "2"
+```
 
 
 

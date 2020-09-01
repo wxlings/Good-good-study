@@ -8,6 +8,8 @@ Android 系统架构:
 版本:
 L5,M6,N7,O8,P9
 
+Handler: 系统消息总线,runOnUiThread() View.post() HandlerThread() IntentService() AsyncTask();
+
 https:
 从Android9.0开始应用程序默认只允许使用https协议进行网络请求,http默认有安全隐患不再被支持
 

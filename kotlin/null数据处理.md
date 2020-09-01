@@ -35,6 +35,7 @@ Kotlin中空值判断相对Java代码非常简洁,逻辑稍稍需要理解
 ```
 
 ##### 辅助函数 `?.`进行空值判断
+
 辅助函数的作用:只有`?.`验证通过的'值'才会去执行后面的逻辑
 
 ```kotlin
@@ -74,5 +75,27 @@ Lambda表达式中可以是任何逻辑
             print(msg.length)
         }
     }
+
+```
+
+
+#### 空判断辅助函数 `?.`和`?:`
+
+`?.`变量不为空才会继续执行后面的(可以是变量的方法也可以是变量的成员方法)
+
+```kotlin
+    var name:String?
+    name = null
+
+    val length = name?.length // 如果name == null 直接返回null
+
+```
+`?:` 如果变量为null ,可以返回一个默认值 
+
+```kotlin
+    var name:String?
+    name = null
+
+    val length = name?.length?: '-1' // 如果name == null 直接返回-1,
 
 ```
