@@ -400,6 +400,9 @@ When a process is created for your application, its main thread is dedicated to 
     public Handler(Looper looper) {
         this(looper, null, false);
     }
+    /**
+    * 在创建Handler对象的时候就获取了当前现成的Looper对象及该Looper对象关联的MessageQueue对象
+    */
     public Handler(Looper looper, Callback callback, boolean async) {
         mLooper = looper;
         mQueue = looper.mQueue;
@@ -488,8 +491,87 @@ When a process is created for your application, its main thread is dedicated to 
 ![Handler](https://github.com/wxlings/Good-good-study/blob/master/static/img/handler.jpg)
 
 
+###### IdleHandler
+
+用于发现线程什么时候会阻塞等待更多消息。
+创建消息屏障的逻辑: 拿到Message的空消息,设置屏障token,然后插入到队列头部,暂时阻塞队列中的其他消息,执行完后再移除屏障
+
+```java
+
+    /**
+     * Posts a synchronization barrier to the Looper's message queue.
+     *
+     * Message processing occurs as usual until the message queue encounters the
+     * synchronization barrier that has been posted.  When the barrier is encountered,
+     * later synchronous messages in the queue are stalled (prevented from being executed)
+     * until the barrier is released by calling {@link #removeSyncBarrier} and specifying
+     * the token that identifies the synchronization barrier.
+     *
+     * This method is used to immediately postpone execution of all subsequently posted
+     * synchronous messages until a condition is met that releases the barrier.
+     * Asynchronous messages (see {@link Message#isAsynchronous} are exempt from the barrier
+     * and continue to be processed as usual.
+     *
+     * This call must be always matched by a call to {@link #removeSyncBarrier} with
+     * the same token to ensure that the message queue resumes normal operation.
+     * Otherwise the application will probably hang!
+     *
+     * @return A token that uniquely identifies the barrier.  This token must be
+     * passed to {@link #removeSyncBarrier} to release the barrier.
+     *
+     * @hide
+     */
+    public int postSyncBarrier() {
+        return postSyncBarrier(SystemClock.uptimeMillis());
+    }
+
+    private int postSyncBarrier(long when) {
+        // Enqueue a new sync barrier token.
+        // We don't need to wake the queue because the purpose of a barrier is to stall it.
+        synchronized (this) {
+            final int token = mNextBarrierToken++;
+            final Message msg = Message.obtain();
+            msg.markInUse();
+            msg.when = when;
+            msg.arg1 = token;
+
+            Message prev = null;
+            Message p = mMessages;
+            if (when != 0) {
+                while (p != null && p.when <= when) {
+                    prev = p;
+                    p = p.next;
+                }
+            }
+            if (prev != null) { // invariant: p == prev.next
+                msg.next = p;
+                prev.next = msg;
+            } else {
+                msg.next = p;
+                mMessages = msg;
+            }
+            return token;
+        }
+    }
+
+ public void addIdleHandler(@NonNull IdleHandler handler) {
+        if (handler == null) {
+            throw new NullPointerException("Can't add a null IdleHandler");
+        }
+        synchronized (this) {
+            mIdleHandlers.add(handler);
+        }
+}
+
+```
+
+Callback interface for discovering when a thread is going to block waiting for more messages.
+
 ##### todo Handler中有Loop死循环，为什么没有阻塞主线程，原理是什么？ 
 https://blog.csdn.net/jdsjlzx/article/details/108222678
+
+
+
 
 
 
@@ -522,5 +604,13 @@ Message 可以包装多类型的数据,用作于数据的承载者;Message本身
 - Handler/Looper.loop()的死循环为什么不会导致ANR? 会持有cpu资源么?
 
 在Looper.loop()方法中有个for无限循环来获取队列中的Message对象, `Message msg = queue.next(); // might block` `next()`可能是阻塞的,意思就是没有消息就会阻塞,这里阻塞和我们正常接触的线程阻塞是不一样的,在这个方法中会调用Native 方法`nativePollOnce()`,这里就涉及Linux的epoll机制，是一种IO多路复用机制,以同时监控多个描述符，当某个描述符就绪(读或写就绪)，则立刻通知相应程序进行读或写操作，本质同步I/O，即读写是阻塞的。此时主线程会释放CPU资源进入休眠状态，所以说，主线程大多数时候都是处于休眠状态，并不会消耗大量CPU资源。
+
+- Handler 如果保证线程安全的?
+
+主要是通过`synchronized`保证线程同步的,在loop()方法,所有的关键方法都有修饰
+
+- 消息屏障 ?
+
+ // todo ...
 
 

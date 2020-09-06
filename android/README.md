@@ -233,3 +233,5 @@ BroadcastReceiver 广播有两种:
     registerReceiver()
     unregisterReceiver()
 ```
+
+四大组件的通信都是通过AMS的
