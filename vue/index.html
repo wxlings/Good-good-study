@@ -42,10 +42,15 @@
         <img class="auto" :src="image_url" alt="这是一个随机图片">
     </div>
 
-    <div id="vue">
-        <h2>{{title}}</h2>
+    <div id="vue" class="">
+        <h2 v-if="show">{{title}}</h2>
+        <h3>{{getMessage}}</h3>
+        <button @click="reverse">点我</button>
         <a :href="url" target="">进入官网</a>
+        <input v-model="message"/>
     </div>
+
+  
     
 
     <script>
@@ -66,6 +71,30 @@
             data:{
                 title:'Vue相关信息',
                 url:'https://cn.vuejs.org/v2/guide/index.html',
+                show:true,
+                message:'Default'
+            },
+            methods:{
+                reverse:function(){
+                    this.title = this.title.split("").reverse().join('')
+                }
+            },
+            watch:{
+                message(newValue,oldValue){
+                    console.error("Variable message: ",newValue,oldValue);
+                }
+            },
+            computed:{
+                getMessage(){
+                    switch (this.message) {
+                        case 'Hello':
+                        case 'hello':
+                            alert("欢迎来到 Hello,world !!!")
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         })
     </script>

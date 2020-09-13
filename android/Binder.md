@@ -7,7 +7,7 @@
 
 Linux知识:
 
-其他ipc: 管道,消息队列,共享内存,信号量,socket
+其他ipc: 管道（Pipe）、信号（Signal）和跟踪（Trace）报文队列（Message）、共享内存（Share Memory）和信号量（Semaphore）,插口（Socket）
 
 
 *  进程空间划分
