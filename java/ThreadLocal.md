@@ -70,8 +70,8 @@ __通常用这个类实例来保存一些在当前线程需要保证数据唯一
 打印结果:
 
 > E/ThreadLocal: Thread-4 ::Thread-4
-> E/ThreadLocal: Thread-4 ::Thread-4
-> E/ThreadLocal: Thread-4 ::Thread-4
+> E/ThreadLocal: Thread-5 ::Thread-5
+> E/ThreadLocal: Thread-6 ::Thread-6
 
 结论: **_在主线程创建的ThreadLocal实例,然后在三个线程去`set`,分别在各自线程内仅能看到自己线程设置的结果_**
 
@@ -79,18 +79,39 @@ __通常用这个类实例来保存一些在当前线程需要保证数据唯一
 
 ```java
 
-     public void set(T value) {
+    /**
+     * Sets the current thread's copy of this thread-local variable
+     * to the specified value.  Most subclasses will have no need to
+     * override this method, relying solely on the {@link #initialValue}
+     * method to set the values of thread-locals.
+     *
+     * @param value the value to be stored in the current thread's copy of
+     *        this thread-local.
+     */
+    public void set(T value) {
         Thread t = Thread.currentThread();
-        ThreadLocalMap map = getMap(t); // 获取当前Thread关联的ThreadLocalMap
+        ThreadLocalMap map = getMap(t);
         if (map != null)
-            map.set(this, value);   // 以当前ThreadLoacl 为key,存储value
+            map.set(this, value);
         else
             createMap(t, value);
+    }
+
+     /**
+     * Get the map associated with a ThreadLocal. Overridden in
+     * InheritableThreadLocal.
+     *
+     * @param  t the current thread  每个线程都有一个ThreadLocalMap,用来存放ThreadLocal实例
+     * @return the map
+     */
+    ThreadLocalMap getMap(Thread t) {
+        return t.threadLocals;
     }
 
 ```
 
 __以当前ThreadLoacl 为key,也就是说一个线程可以有多个ThreadLocal实例,但是每个实例只能存储一个value;__ 
+
 那么这样看来我们需要存储的数据并没有存到ThreadLocal对象里面,而是存到了ThreadLocalMap里面,来看一下这个ThreadLocalMap:
 
 ```java
@@ -146,3 +167,7 @@ ThreadLocal类了,作为Thread内全局数据,就会很方便了;
     threadLocal.get();          // 获取自定义的变量
     threadLocal.remove();       // 移除保存的value,实际是ThreadLocalMap中当前Thread关联的entry;避免内存泄漏
 ```
+
+
+描述:
+这个类提供线程内的局部变量,也就是提供每个线程私有的变量,常用于保证Thread内变量的全局性和唯一性;类提供了set(),get(),remove(),initialValue(方法,也就是一个ThreadLocal对象对应一个目标局部变量;因为每个Thread类都有一个ThreadLocalMap引用,本质就是以ThreadLocal实例作为key,以目标变量作为value存入到与当前线程唯一的ThreadLocalMap中,以此来保证唯一性;正因为此使用时要注意,存在内存泄漏的风险,注意使用remove方法;在Handler模型中,就用到ThreadLoad来保存Looper对象;

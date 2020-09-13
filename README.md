@@ -29,3 +29,4 @@ vuex: Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。它�
 vue.js : 渐进式框架
 ![vue](https://cn.vuejs.org/images/lifecycle.png)
 生命周期: `beforeCreate()` -> `created()` -> `beforerMount()` -> `mounted()` -> `beforeUpdated()` -> `update()` -> `beforeDestroy()` -> `destoryed()`
+

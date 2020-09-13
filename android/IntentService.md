@@ -81,3 +81,5 @@ All requests are handled on a single worker thread -- they may take as long as n
 **记住在子线程中使用Looper对象时一定要记得要将Looper对象进行`quit()`,否则会有内存泄漏**
 
  todo JonIntentService...
+
+ 描述

@@ -7,20 +7,20 @@
 1. 逐一比较相邻的数组元素,如果前者大于后者则交换位置
 2. 一轮下来就会得到一个当前最大的值,并且放在后面
 3. 经过n-1轮后完成排序
-
+	
 ```java
-    public void bubbleSort() {
-		int numbers[] = {5,2,9,1,6,0,7,4,3};
+    public void bubble() {
+		int[] array = {5,2,9,1,6,0,7,4,3};
 		int temp;
-		for (int i = 0; i < numbers.length-1; i++) {
-			for (int j = 0; j < numbers.length-i-1; j++) {
-				if (numbers[j] > numbers[j+1]) {         // 因为这里用到的j+1,所以上面j的取值范围就是numbers.length-i-1
-					temp = numbers[j+1];
-					numbers[j+1] = numbers[j];
-					numbers[j] = temp;
+		for (int i = 0; i < array.length-1; i++) {
+			for (int j = 0; j < array.length-i-1; j++) {
+				if (array[j] > array[j+1]) {         // 因为这里用到的j+1,所以上面j的取值范围就是numbers.length-i-1
+					temp = array[j+1];
+					array[j+1] = array[j];
+					array[j] = temp;
 				}
 			}
-			System.out.println(Arrays.toString(numbers));
+			System.out.println(Arrays.toString(array));
 		}
 	}
 ```
@@ -46,17 +46,17 @@
 
 ```java
     public void selectSort() {
-    int numbers[] = {5,2,9,1,6,0,7,4};
+    int array[] = {5,2,9,1,6,0,7,4};
     int temp;
-    for (int i = 0; i < numbers.length-1; i++) {
-        for (int j = i+1; j < numbers.length; j++) {
-            if (numbers[i] > numbers[j]) {
-                temp = numbers[i];
-                numbers[i] = numbers[j];
-                numbers[j] = temp;
+    for (int i = 0; i < array.length-1; i++) {
+        for (int j = i+1; j < array.length; j++) {
+            if (array[i] > array[j]) {
+                temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
             }
         }
-        System.out.println(Arrays.toString(numbers));
+        System.out.println(Arrays.toString(array));
     }
 	}
 ```
@@ -81,19 +81,19 @@
 
 ```java
     public void insertSort() {
-		int numbers[] = {5,2,9,1,6,0,7,4};
+		int array[] = {5,2,9,1,6,0,7,4};
 		int temp;
-		for (int i = 1; i < numbers.length; i++) {
+		for (int i = 1; i < array.length; i++) {
 			for (int j = i; j > 0; j--) {
-				if (numbers[j-1]>numbers[j]) {  // 这里用的时n-1,就是前一个值所以上面j的取值范围时j>0,对于j的初始值不是固定的,也可以时i-1,这样的话取值范围时j>=0,下面就不能用j-1了
-					temp = numbers[j-1];
-					numbers[j-1] = numbers[j];
-					numbers[j] = temp;
+				if (array[j-1]>array[j]) {  // 这里用的时n-1,就是前一个值所以上面j的取值范围时j>0,对于j的初始值不是固定的,也可以时i-1,这样的话取值范围时j>=0,下面就不能用j-1了
+					temp = array[j-1];
+					array[j-1] = array[j];
+					array[j] = temp;
 				} else {
 					break;                  // 这里进行优化,如果后面值大于前面值跳过后面比较
 				}
 			}
-			System.out.println(Arrays.toString(numbers));
+			System.out.println(Arrays.toString(array));
 		}
 	}
 ```
@@ -147,15 +147,15 @@
 
 ```java
 	public void binarySearch () {
-		int numbers[] = {1,3,5,7,9,15,21,35};
+		int array[] = {1,3,5,7,9,15,21,35};
 		int target = 35;
-		int index = -1,low = 0,high = numbers.length,middle;
+		int index = -1,low = 0,high = array.length,middle;
 		while (low <= high) {
 			middle = (low + high )/2;
-			if (numbers[middle] == target) {
+			if (array[middle] == target) {
 				index = middle;
 				break;
-			}else if (numbers[middle] > target) {
+			}else if (array[middle] > target) {
 				high = middle - 1;
 			}else {
 				low = middle + 1;
