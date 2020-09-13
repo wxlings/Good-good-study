@@ -171,3 +171,13 @@ Java synchronized关键字本质上是可重入的，这意味着如果一个同
 4. Java synchronization will throw NullPointerException if object used in synchronized block is null.
 5. Synchronized methods in Java put a performance cost on your application. So use synchronization when it is absolutely required. Also, consider using synchronized code blocks for synchronizing only critical section of your code. 使用synchronized是有性能影响的,适度使用
 6. It’s possible that both static synchronized and non static synchronized method can run simultaneously or concurrently because they lock on different object.静态和非静态方法或者代码块有可能同时执行,因为它们的锁的对象不同
+
+
+
+##### synchronized 实现原理:
+
+要了解 synchronized 的原理需要先理清楚两件事情：对象头和 Monitor。
+ 
+ Java 对象在内存中的布局分为 3 部分：对象头、实例数据、对齐填充,当我们在 Java 代码中，使用 new 创建一个对象的时候，JVM 会在堆中创建一个 instanceOopDesc 对象，这个对象中包含了对象头以及实例数据。
+
+对象头:  
