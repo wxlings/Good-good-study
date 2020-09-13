@@ -1,5 +1,4 @@
-#这是一个杂七杂八的仓库，我要慢慢把他维护好！主要做记录用#
-
+### 学习不刻苦,将来买红薯
 
 VS.code 插件安装：
 1. Chinese (Simplified) Language Pack for Visual Studio Code 汉化包
