@@ -1,6 +1,7 @@
-Kotlin 仍然有‘一切皆对象'的思想,因为jvm的思想没有改变...
+# Kotlin 仍然有‘一切皆对象'的思想,因为jvm的思想没有改变...
 
-### 基本语法：
+## 基本语法
+
 > 还是有很多和java相似的地方，毕竟都要遵循jvm的规则
 
 `package` 声明包信息
@@ -12,7 +13,6 @@ Kotlin 仍然有‘一切皆对象'的思想,因为jvm的思想没有改变...
 ```
 
 **程序入口**
-
 `main`函数:程序的主入口,唯一;相对于Java的`main`更简洁
 
 ```kotlin
@@ -40,10 +40,10 @@ Kotlin 仍然有‘一切皆对象'的思想,因为jvm的思想没有改变...
     val property = "live"
     // property = "have" // 编译报错
 ```
+
 > **字面量**： 16进制使用`0x`,二进制使用`0b`,浮点数默认`Double`
 
 **基本数据类型**
-
 与Java相同：`Char`,`Byte`,`Short`,`Int`,`Long`,`Float`,`Double`,`Boolean`
 
 数值类型：
@@ -68,7 +68,6 @@ Kotlin 仍然有‘一切皆对象'的思想,因为jvm的思想没有改变...
 ```
 
 数字类型支持如下的转换:
-
     `toByte(): Byte`
     `toShort(): Short`
     `toInt(): Int`
@@ -87,8 +86,7 @@ Boolean类型：
 支持: `||`,`&&`,`!`
 
 **引用数据类型**
-
-String:
+_String:_
 
 ```kotlin
     var str:String = "My name is Hello!"
@@ -97,9 +95,8 @@ String:
     }
 ```
 
-*字符串模板*
-
-> 使用 `$var` 或者 `${fun}` 进行引用,注意要使用双引号
+> 字符串模板
+使用 `$var` 或者 `${fun}` 进行引用,注意要使用双引号
 
 ```kotlin
     var name="Jesson"
@@ -109,12 +106,14 @@ String:
         hello,
         world!
     """
-    
 ```
-Array: 数组
-**数组初始化后是不可以扩容的;**
+
+_Array: 数组_
+数组初始化后是不可以扩容的;
+
 默认提供了`get`,`set`,`size`属性
 创建数组：`arrayOf`/`arrayOfNull` 或者 工厂函数：`Array(size,{i})`
+
 ```kotlin
     var arr = arrayOf("H","e","l","o")
     arr.set(2,"name")
@@ -127,26 +126,29 @@ Array: 数组
     arr do = DoubleArray(10) 
     arr bo = BooleanArray(2) // false false
 ```
+
 系统还对基本数据类型进行扩展,`ByteArray`,`ShortArray`,`IntArray`,`LongArray`,`FloatArray`,`DoubleArray`,`CharArray`,`BooleanArray`,经过扩展后的数组不在需要初始化
 
-List: 集合
+_List: 集合_
+List集合类
 
 ```kotlin
-// 不可扩容list
-val list = listOf("h","e","l","l","o")  //这种list是不可以扩容的,和数组一样,创建完只能更改内容
-val value = list[0]  //对于list的方法就有很多了
-// list.add(8)         // 没有方法
+    // 不可扩容list
+    val list = listOf("h","e","l","l","o")  //这种list是不可以扩容的,和数组一样,创建完只能更改内容
+    val value = list[0]  //对于list的方法就有很多了
+    // list.add(8)         // 没有方法
 
-// 可变list
-val mutableList = mutableListOf<Int>(1,2)
-mutableList.add(3)
-mutableList.add(4)
+    // 可变list
+    val mutableList = mutableListOf<Int>(1,2)
+    mutableList.add(3)
+    mutableList.add(4)
 
-// 返回一个空的ArrayList,等同于  mutableListOf<Int>()
-val arrayList = arrayListOf<Int>()
+    // 返回一个空的ArrayList,等同于  mutableListOf<Int>()
+    val arrayList = arrayListOf<Int>()
 ```
 
-Set : 集合  `interface Set<out E> : Collection<E>` 实现了Collection接口 和 list 属于一类
+_Set : 集合_  
+`interface Set<out E> : Collection<E>` 实现了Collection接口 和 list 属于一类
 
 ```kotlin
     // read-only 没有add()
@@ -159,9 +161,10 @@ Set : 集合  `interface Set<out E> : Collection<E>` 实现了Collection接口 �
 
 ````
 
-Map : 键值对映射 
+_Map : 键值对映射_
+Map映射结构
 
-```kotlin 
+```kotlin
 
     // Returns an empty read-only map.
     val map = mapOf<Int,String>(0 to "0",1 to "1")
@@ -171,11 +174,20 @@ Map : 键值对映射
     mutableMap[2] = "2"
 ```
 
+**`fun` 声明函数**
+使用`fun`进行函数声明
 
+```kotlin
+    fun eat{
+        print("Eat it")
+    }
 
-`fun` 声明函数
+    fun listen():Any{
+        return "Something"
+    }
+```
 
-#### 条件控制
+### 条件控制
 
 `if-else` 支持基本用法：
 
@@ -226,7 +238,7 @@ Map : 键值对映射
     }
 ```
 
-#### 循环
+### 循环
 
 `for` 循环可以对任何提供迭代器（iterator）的对象进行遍历
 
@@ -260,24 +272,48 @@ Map : 键值对映射
 
 > 在 Kotlin 中任何表达式都可以用标签（label）来标记。 标签的格式为标识符后跟 @ 符号
 
-
 ### 类与对象
-   
-Kotlin 类可以包含：构造函数和初始化代码块、函数、属性、内部类、对象声明。
-Kotlin 中使用关键字 `class` 声明类
+
+Kotlin 类可以包含：构造函数（主构造函数和次构造函数）和初始化代码块、函数、属性、内部类、对象声明。
+Kotlin 中使用关键字 `class` 声明类,类的继承性需要使用`open`关键字进行修饰，默认是 `final`不可继承；
+
+在 Kotlin 中的一个类可以有一个主构造函数以及一个或多个次构造函数.主构造函数是类头的一部分：它跟在类名（与可选的类型参数）后。
+主构造函数不能包含任何的代码。初始化的代码可以放到以 init 关键字作为前缀的初始化块（initializer blocks）中。
+
+```kotlin
+    open class Person(val name:String,val age:Int = 18){
+        val temp = name.toUpperCase();  // 可以直接使用构造数据
+        init {
+            println("初始化...相当于构造方法执行")
+        }
+    }
+
+    class Student(val name:String,val age:Int):Person(name,age){
+        val age = age + 1
+        init{
+            print(age)
+        }
+    }
+```
+
+
 在 Kotlin 中的一个类可以有一个主构造函数以及一个或多个次构造函数。主构造函数是类头的一部分：它跟在类名（与可选的类型参数）后。
 如果想要重写默认构造方法还是比较麻烦的，尤其是次构造方法
 
+如果类有一个主构造函数，每个次构造函数需要委托给主构造函数， 可以直接委托或者通过别的次构造函数间接委托。委托到同一个类的另一个构造函数用 this 关键字即可：
+
 ```kotlin
 
-    class Person(var name:String,var age:Int,var gender:Char){
+    class Person(val name:String,val age:Int,val gender:Char){
 
         constructor(name:String):this(name,0,'M') // 声明了次级构造函数，必须要指定到主构造方法参数
 
         var phone:String = ""
+
         get() {
             return if (field.length == 11) field else "null"
         }
+
         set(value) {
             if (value.length == 11){
                 field = value
@@ -291,6 +327,7 @@ Kotlin 中使用关键字 `class` 声明类
         fun say(msg:Any){
             println("$name say: $msg")
         }
+
         fun getUserInfo():String{
             val other:Any = "Phone=>$phone"
             return "Name:${this.name},\nAge:${this.age},\nGender:${if (this.gender == 'M') "Male" else "Female"},\nOther:\n$other"
