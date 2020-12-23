@@ -29,3 +29,15 @@ vue.js : 渐进式框架
 ![vue](https://cn.vuejs.org/images/lifecycle.png)
 生命周期: `beforeCreate()` -> `created()` -> `beforerMount()` -> `mounted()` -> `beforeUpdated()` -> `update()` -> `beforeDestroy()` -> `destoryed()`
 
+二进制：
+向左移动一位：`<<` 相当于*2,向又移动一位：`>>>` 相当于/2
+
+```java
+    void binary(){
+        64 << 2    // 等同于 64*4
+        64 >>> 3   // 等同于64/8
+    }
+```
+
+FastJson: 相关
+JSONObject 的实现是Map(HashMap/LinkedMap); JSONArray 的实现是List(ArrayList);

@@ -23,8 +23,9 @@
 
 **变量声明：`var`与`val`**
 
-> `var` 声明变量：声明后可以改变其值,支持再赋值
-> `val` 声明常量：不可改变,一旦赋值后就不支持再赋值
+> `var` 可变变量：声明后可以改变其值,支持再赋值
+> `val` 不可变变量(并不是常量)：一旦赋值后就不支持再赋值
+> `const` 声明常量,必须直接赋值,要在`object`
 > 在Kotlin里面有个`lateinit`,字面意思'晚初始化'，可以修饰`var`
 
 ```kotlin
@@ -96,10 +97,12 @@ _String:_
 ```
 
 > 字符串模板
+
 使用 `$var` 或者 `${fun}` 进行引用,注意要使用双引号
 
 ```kotlin
     var name="Jesson"
+    fun getAge(age:Int) = age + 1 
     var str = "My name is $name,and I`m ${getAge(1996)} years old;"
     println("$name.length is ${name.length} !")
     var msg = """
@@ -115,16 +118,18 @@ _Array: 数组_
 创建数组：`arrayOf`/`arrayOfNull` 或者 工厂函数：`Array(size,{i})`
 
 ```kotlin
-    var arr = arrayOf("H","e","l","o")
-    arr.set(2,"name")
-    var value = arr.get(2)
+    var arr = arrayOf("H","e","l","o") // 直接初始化数组内容
+    arr.set(2,"name") // 不推荐直接使用arr[2]
+    var value = arr.get(2) // 不推荐直接使用arr[2]
     var length = arr.size
-    arr = arraryOfNulls<Int>(20) // 创建size为20,内容都为null的数组
+    arr = arraryOfNulls<String>(20) // 创建size为20,内容都为null的数组
     arr = Array(10,{i -> i+2}) // 2,4,6,8,10,...工厂函数默认创建Int类型数组,默认由0开始
 
     arr fl = FloatArray(3) // 0.0
-    arr do = DoubleArray(10) 
+    arr dou = DoubleArray(10) 
     arr bo = BooleanArray(2) // false false
+
+    // 创建数组时
 ```
 
 系统还对基本数据类型进行扩展,`ByteArray`,`ShortArray`,`IntArray`,`LongArray`,`FloatArray`,`DoubleArray`,`CharArray`,`BooleanArray`,经过扩展后的数组不在需要初始化
@@ -190,23 +195,25 @@ Map映射结构
 ### 条件控制
 
 `if-else` 支持基本用法：
+在 Kotlin 中，if是一个表达式，即它会返回一个值。
 
 ```kotlin
     var a = 10
     var b = 15
     var max:Int
-    if (a > b){
+
+    if (a > b){  // java写法
         max = a
     } else {
         max = b
     }
 
-    // 也可以写作 ：
+    // 也可以写作 ：if是一个表达式，即它会返回一个值。也就是不需要三元运算了
     max = if (a > b) a else b
 
-    // 也可以写作：
+    // 也可以写作：if 的分支可以是代码块，最后的表达式作为该块的值
     max = if (a > b){
-        println("a>b")
+        println("a>b")  // 也可以增加其他逻辑
         a
     } else {
         println("a<b")
@@ -223,6 +230,16 @@ Map映射结构
     }
 ```
 
+`is`,`!is` 检测一个值是（is）或者不是（!is）一个特定类型的值。
+
+```kotlin
+    fun hasPrefix(value:Any) = when(value){
+        is String -> value.startWith("http")
+        is Int -> value > 0
+        else -> false
+    }
+```
+
 `when-else` 类似`swich`,把参数和所有条件进行比较,直到满足条件,`else` 等同于`default`
 
 ```kotlin
@@ -232,6 +249,7 @@ Map映射结构
         in 2..5 -> println("x in 2..5")
         !in 5..7 -> println("!in 5..7")
         8,9,10 -> println("8,9,10")
+        in numbers -> println("在数据集合numbers中")
         else->{
             println("Not in 1-10")
         }
@@ -256,9 +274,11 @@ Map映射结构
     for (i in array){
         println(i)
     }
+    // 通过索引遍历一个数组或者一个 list
     for (i in array.indices){
         println("$i -> ${array[i]}")
     }
+    // 可以用库函数 withIndex：遍历数组的方式
     for ((index,item) in array.withIndex()){
         println("$index -> $item")
     }
@@ -296,7 +316,6 @@ Kotlin 中使用关键字 `class` 声明类,类的继承性需要使用`open`关
     }
 ```
 
-
 在 Kotlin 中的一个类可以有一个主构造函数以及一个或多个次构造函数。主构造函数是类头的一部分：它跟在类名（与可选的类型参数）后。
 如果想要重写默认构造方法还是比较麻烦的，尤其是次构造方法
 
@@ -308,7 +327,7 @@ Kotlin 中使用关键字 `class` 声明类,类的继承性需要使用`open`关
 
         constructor(name:String):this(name,0,'M') // 声明了次级构造函数，必须要指定到主构造方法参数
 
-        var phone:String = ""
+        var phone:String = ""if
 
         get() {
             return if (field.length == 11) field else "null"
@@ -342,3 +361,24 @@ Kotlin 中使用关键字 `class` 声明类,类的继承性需要使用`open`关
     val info = person.getUserInfo()
     println(info)
 ```
+
+#### Class与KClasss;
+
+`Class`是java环境下的，`KClass`是kotlin环境下的
+```kotlin
+
+    fun main()}{
+
+    }
+
+    fun test(clazz Class<? extends Activity>){
+        // todo 
+    }
+
+     fun test(clazz KClass<? : Activity>){
+        // todo 
+    }
+
+```
+
+嵌套函数： 通常不会使用嵌套函数

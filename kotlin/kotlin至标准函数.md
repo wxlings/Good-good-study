@@ -19,7 +19,7 @@ let 是内置函数:提供了函数式Api接口编程,会将原始调用对象�
 
     // java
     Person person = ...
-    if(person !== null){
+    if(person != null){
         person.drink()
         person.eat()
     }
@@ -34,6 +34,7 @@ let 是内置函数:提供了函数式Api接口编程,会将原始调用对象�
 ```
 
 ### with 独立函数,需要传入数据对象,有返回值
+
 `with` 通常作为对立的载体,需要两个参数
 参数1: 一个任意对象
 参数2: Lambda表达式
