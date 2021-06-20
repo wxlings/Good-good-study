@@ -2,6 +2,8 @@
 
 ## T.let() (T表示调用对象)
 
+> _The context object_ is available as an argument _(it)_. The return value is the lambda result.
+
 let 是内置函数:提供了函数式Api接口编程,会将原始调用对象传递给Lambda表达式中
 
 源码实现是将block()返回而代码会返回R类型,也就是支持数据返回
@@ -18,23 +20,28 @@ let 是内置函数:提供了函数式Api接口编程,会将原始调用对象�
         contract {
             callsInPlace(block, InvocationKind.EXACTLY_ONCE)
         }
-        return block(this)
+        return block(this)  // 返回表达式的结果
     }
 
     // 测试
-    open class Person(val name:String){
+    class Person(val name:String){
         fun eat(){
             println("eat() ...")
         }    
     }
    
-    fun main(){
-        val person = Person("张三")
-        val name = person?.let {   // 当person != null 调用内部方法
-            it.eat()
-            it.name
-        }
+    fun test(person:Person?){
+        val name:String = person?.let {   // 当person != null 调用内部方法 , 否则把"--"赋值给name属性
+            it.eat() // 正常执行一些逻辑
+            it.name  // 把it.name 作为表达式的结果返回
+        }?:"--"
         println(name)
+    }
+
+    fun another(person:Person?){
+        person?.let{  // 如果不需要接收表达式的结果,直接写逻辑
+            println("${it.name}")
+        }
     }
 ```
 
@@ -55,11 +62,11 @@ let 是内置函数:提供了函数式Api接口编程,会将原始调用对象�
             callsInPlace(block, InvocationKind.EXACTLY_ONCE)
         }
         block()
-        return this
+        return this // 返回引用对象本身
     }
 
     // 测试:
-    val fruits = mutableListOf<String>("apple","banana","pear")
+    val fruits = mutableListOf("apple","banana","pear")
     fruits.apply { 
         this.add("orange")  
         remove("apple")     // 当前对象是fruits,可以省略this
@@ -95,12 +102,14 @@ let 是内置函数:提供了函数式Api接口编程,会将原始调用对象�
         contract {
             callsInPlace(block, InvocationKind.EXACTLY_ONCE)
         }
-        block(this)
-        return this
+        block(this) // 先执行表达式
+        return this // 返回引用对象本身
     }
 ```
 
 ## with 独立函数,需要传入数据对象,有返回值
+
+> A non-extension function: _the context object_ is passed as an argument, but inside the lambda, it's available as a receiver _(this)_. The return value is the lambda result.
 
 `with` 通常作为对立的载体,需要两个参数
 参数1: 一个任意对象
@@ -129,6 +138,7 @@ let 是内置函数:提供了函数式Api接口编程,会将原始调用对象�
 > 注意区分 `run()`和`T.run()`,两者不一样,一个独立的代码块,一个是依赖调用对象
 
 这里是简单的代码块,可以有返回值,最终`return block()`
+因为`run()`没有依赖对象,所以内部没有`this`或者`it`
 
 ```kotlin
 
@@ -154,6 +164,8 @@ let 是内置函数:提供了函数式Api接口编程,会将原始调用对象�
 ```
 
 ## T.run()
+
+> 注意区分 `run()`和`T.run()`,两者不一样,一个独立的代码块,一个是依赖调用对象
 
 ```kotlin
 
@@ -218,4 +230,30 @@ let 是内置函数:提供了函数式Api接口编程,会将原始调用对象�
     fun main(){
         test(199)
     }
+```
+
+<br/>
+
+# 官方给出的使用总结:
+
+1. Executing a lambda on non-null objects: `let`
+2. Introducing an expression as a variable in local scope: `let`
+3. Object configuration: `apply`
+4. Object configuration and computing the result: `run`
+5. Running statements where an expression is required: non-extension `run`
+6. Additional effects: `also`
+7. Grouping function calls on an object: `with`
+
+## T.takeIf() and T.takeUnless()
+
+`takeIf{}`对引用对象进行条件过滤,如果成立执行后续逻辑否则`chains`结果为null
+`takeUnless{}`对引用对象进行条件过滤,如果成立chain返回null,否则继续执行
+
+```kotlin
+
+    val name = "hello,world!"
+    val first = name.takeIf { 'a' in it }?.toUpperCase() ?: run { " takeIf过滤失败 "}
+    val second = name.takeUnless {'w' in it}?.run{ "successed" } ?: run { "failed" }
+    println(second)
+
 ```
