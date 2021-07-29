@@ -25,7 +25,7 @@ A navigation controller object manages its child view controllers using an **ord
 
 <br/>
 
-![ios stack](https://docs-assets.developer.apple.com/published/83ef757907/nav_controllers_objects_a8447aef-d652-4ab9-85d1-1eb8e4876e12.jpg)
+<img src="https://docs-assets.developer.apple.com/published/83ef757907/nav_controllers_objects_a8447aef-d652-4ab9-85d1-1eb8e4876e12.jpg" alt="ios stack"  />
 
 A navigation controller is a container view controller—that is, it embeds the content of other view controllers inside of itself. You access a navigation controller’s view from its [`view`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621460-view) property.The navigation controller manages the creation, configuration, and display of the navigation bar and optional navigation toolbar.
 
@@ -44,7 +44,7 @@ A navigation controller is a container view controller—that is, it embeds the 
 在混合开发的应用中，原生Android、iOS与Flutter各自实现了一套互不相同的页面映射机制，原生平台采用的是单容器单页面，即一个ViewController或Activity对应一个原生页面；而Flutter采用单容器多页面的机制，即一个ViewController或Activity对应多个Flutter页面。Flutter在原生的导航栈之上又自建了一套Flutter导航栈，这使得原生页面与Flutter页面与之间进行页面切换时，需要处理跨引擎的页面切换问题。
 
 
-![hibird](https://img-blog.csdnimg.cn/20200127143237690.png)
+<img src="https://img-blog.csdnimg.cn/20200127143237690.png" alt="hibird" style="zoom: 67%;" />
 
 <br/>
 
@@ -58,7 +58,7 @@ A navigation controller is a container view controller—that is, it embeds the 
 3. Flutter关闭当前及根页面
    - 使用MethodChannel与原生通信,由原生端实现跳转逻辑
 
-![skip](https://img-blog.csdnimg.cn/20200127145101781.png)
+<img src="https://img-blog.csdnimg.cn/20200127145101781.png" alt="skip" style="zoom: 50%;" />
 
 
 
