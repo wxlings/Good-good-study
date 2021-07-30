@@ -1,14 +1,20 @@
-Flutter开发模式主要分为两种: 一种是独立App的模式,以Flutter项目为主,原生工程会包含在Flutter工程目录下, 另一种是让Flutter以模块的的形式存在,分别被集成/依赖在已有的ios和Android原生应用下,原生工程可以在任何目录结构下,和Futter工程地址不产生关联.(但是建议与原生工程同一级别目录,部分构建脚本文件需要被git跟踪)
+## 说在前面
 
-> 对于第一种模式等同于创建一个Flutter项目, 这里不做讨论.
+有时候，用 Flutter 一次性重写整个已有的应用是不切实际的。对于这些情况，**Flutter 可以作为一个库或模块，集成进现有的应用当中。模块引入到您的 Android 或 iOS 应用（当前支持的平台）中，以使用 Flutter 来渲染一部分的 UI，或者仅运行多平台共享的 Dart 代码逻辑。**
+
+Flutter是一个由C++实现的Flutter Engine和由Dart实现的Framework组成的跨平台技术框架。其中，**Flutter Engine负责线程管理、Dart VM状态管理以及Dart代码加载等工作，而Dart代码所实现的Framework则负责上层业务开发**，如Flutter提供的组件等概念就是Framework的范畴。<br/>
+
+##### Flutter开发模式主要分为两种:
+
+-  一种是独立App的模式, 以Flutter项目为主,原生工程会包含在Flutter工程目录下, 
+
+- 另一种是让Flutter以模块的的形式存在,分别被集成/依赖在已有的ios和Android原生应用下,原生工程可以在任何目录结构下,和Futter工程地址不产生关联.
+
+  > (但是建议与原生工程同一级别目录,部分构建脚本文件需要被git跟踪)
 
 
 
-## [集成到现有应用](https://flutter.cn/docs/development/add-to-app)
-
-Flutter 可以作为一个库或模块，集成进现有的应用当中来渲染一部分的 UI，或者仅运行多平台共享的 Dart 代码逻辑。
-
-***仅从Android平台集成进行描述:*** 
+#### [集成到Android应用](https://flutter.cn/docs/development/add-to-app)
 
 - 在 Gradle 脚本中添加一个自动构建并引入 Flutter 模块的 Flutter SDK 钩子。
 
@@ -24,26 +30,38 @@ Flutter 可以作为一个库或模块，集成进现有的应用当中来渲染
 
 - 支持通过从 IDE 或命令行中使用 flutter attach 来实现 Flutter 调试与有状态的热重载。
 
-  
+
+
+
+#### [集成到IOS应用](https://flutter.cn/docs/development/add-to-app#add-to-android-applications)
+
+- 在 Xcode 的 Build Phase 以及 CocoaPods 中，添加一个自动构建并引入 Flutter 模块的 Flutter SDK 钩子。
+- 将 Flutter 模块构建为通用的 iOS Framework 以便集成到您自己的构建系统中；
+- [`FlutterEngine`](https://api.flutter-io.cn/objcdoc/Classes/FlutterEngine.html) API 用于启动并持续地为挂载 [`FlutterViewController`](https://api.flutter-io.cn/objcdoc/Classes/FlutterViewController.html) 以提供独立的 Flutter 环境；
+- 支持了 Objective-C 和 Swift 为宿主的应用程序；
+- Flutter 模块可以通过使用 [Flutter plugins](https://pub.flutter-io.cn/flutter) 与平台进行交互；
+- 支持通过从 IDE 或命令行中使用 `flutter attach` 来实现 Flutter 调试与有状态的热重载。
+
+
 
 
 ### 对已有Android项目进行集成 :
 
-Flutter 可以作为 Gradle 子项目源码或者 AAR 嵌入到现有的 Android 应用程序中。也就是将Flutter module作为依赖项, 通过原生项目对其依赖.
+Flutter 可以作为 Gradle 子项目源码或者 AAR 嵌入到现有的 Android 应用程序中。也就是**将Flutter module作为依赖项, 通过原生项目对其依赖.**
 
-**两种集成方式:** 
+#### **两种集成方式:** 
 
-1. 通过gradle子项目(Android module)的方式进行依赖.
-    优点:  对于Flutter module开发者便于开发 调试, 相对灵活. 
-    缺点:  项目开发者都要下载Flutter SDK,  每次构建时都要重新编译该模块, 打包时间较长.
+1.  通过gradle子项目 ( Android module ) 的方式进行依赖.
+    **优点:**  对于Flutter module开发者便于开发 调试, 相对灵活. 
+    **缺点:**  项目开发者都要下载Flutter SDK,  每次构建时都要重新编译该模块, 打包时间较长.
 
-2. 把Flutter业务代码打包成AAR ( Android Archive ) 包, 对AAR包进行依赖.
+2.  把Flutter业务代码打包成AAR ( Android Archive ) 包, 对AAR包进行依赖.
 
-   优点:  非Flutter module开发者无需安装Flutter SDK, 构建编译应用速度快, 异常率低.
+   **优点:**  非Flutter module开发者无需安装Flutter SDK, 构建编译应用速度快, 异常率低.
    
    
 
-> 注意 : 
+> [注意:](https://flutter.cn/docs/development/add-to-app/android/project-setup)
 > 
 > Flutter 当前仅支持 为 x86_64，armeabi-v7a 和 arm64-v8a 构建预编（AOT）的库。
 > Flutter 引擎支持 x86 和 x86_64 的版本，在模拟器以 debug 即时编译 (JIT) 模式运行时， Flutter 模块仍可以正常运行。
@@ -92,8 +110,11 @@ Flutter 可以作为 Gradle 子项目源码或者 AAR 嵌入到现有的 Android
 ```
 > url 只需要指定aar包的具体位置即可.
 
+<br/>
 
 #### 通过Module的方式依赖:
+
+
 
 1. 创建Flutter Module.<!--(如果已有module可以省略此步骤)-->
 
@@ -287,13 +308,20 @@ Flutter 提供了 FlutterActivity，用于在 Android 应用内部展示一个 F
 
 ## [对已有IOS项目进行集成 :](https://flutter.cn/docs/development/add-to-app/ios/project-setup#embed-the-flutter-module-in-your-existing-application)
 
+
+
 这里有两种方式可以将 Flutter 集成到你的既有应用中。
 
-1. 使用 CocoaPods 依赖管理和已安装的 Flutter SDK 。（推荐）
+1. **使用 CocoaPods 依赖管理和已安装的 Flutter SDK 。（推荐）**
 2. 把 Flutter engine 、你的 dart 代码和所有 Flutter plugin 编译成 framework 。用 Xcode 手动集成到你的应用中，并更新编译设置。
 
 
-> 对于IOS项目的集成的问题 ....
+> 你的应用将不能在模拟器上运行 Release 模式，因为 Flutter 还不支持将 Dart 代码编译成 x86/x86_64 ahead-of-time (AOT) 模式的二进制文件。你可以在模拟机和真机上运行 Debug 模式，在真机上运行 Release 模式。
+
+
+
+***对于已有项目集成Flutter SDK的方式需要结合实际情况而视.***
+
 
 
 参考: 
