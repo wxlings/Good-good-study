@@ -1,9 +1,8 @@
-# 简介
-
+# 说在前面
 
 对于混合开发的应用而言，通常我们只会将应用的部分模块修改成 Flutter 开发，其他模块继续保留原生开发，因此应用内除了 Flutter 的页面之外，还会有原生 Android、iOS 的页面。在这种情况下，Flutter 页面有可能会需要跳转到原生页面，而原生页面也可能会需要跳转到 Flutter 页面。这就涉及到了一个新的问题：**如何统一管理原生页面和 Flutter 页面跳转交互的混合导航栈。**
 
-Flutter是一个由C++实现的Flutter Engine和由Dart实现的Framework组成的跨平台技术框架。其中，**Flutter Engine负责线程管理、Dart VM状态管理以及Dart代码加载等工作，而Dart代码所实现的Framework则负责上层业务开发**，如Flutter提供的组件等概念就是Framework的范畴。<br/>
+
 
 ## 1. [Android的任务和返回堆栈](https://developer.android.google.cn/guide/components/activities/tasks-and-back-stack)
 
